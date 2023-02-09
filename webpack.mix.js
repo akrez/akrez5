@@ -1,5 +1,4 @@
-const mix = require('laravel-mix');
-
+const mix = require("laravel-mix");
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -11,6 +10,12 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css')
+mix.setPublicPath("public/dist/");
+mix.setResourceRoot('../');
+
+mix.js("resources/js/app.js", "js")
+    .autoload({
+        jquery: ["$", "window.jQuery", "jQuery"],
+    })
+    .sass("resources/sass/app.scss", "css")
     .sourceMaps();

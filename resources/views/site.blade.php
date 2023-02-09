@@ -9,22 +9,8 @@
     <link href="favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <title>@yield('title', config('app.name'))</title>
-    <!-- Bootstrap 5 -->
-    <link rel="stylesheet" href="{{ asset('dist/bootstrap-5.0.2-dist/css/bootstrap.rtl.min.css') }}">
-    <!-- Font Sahel -->
-    <link rel="stylesheet" href="{{ asset('dist/vazirmatn-v32.102/Vazirmatn-font-face.css') }}">
-    <!-- All -->
-    <link rel="stylesheet" href="{{ asset('dist/fontawesome-free-5.15.4-web/css/all.min.css') }}">
-    <!-- All -->
-    <link rel="stylesheet" href="{{ asset('dist/bootstrap-social-rtl/bootstrap-social.css') }}">
-    <!-- style -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
-    <style>
-        .z-1030 {
-            z-index: 1030;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('dist/css/app.css') }}">
 
     @yield('POS_HEAD')
 </head>
@@ -92,7 +78,7 @@
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a href="{{ route('products.index') }}"
-                                class="nav-link">
+                            class="nav-link">
                                 @lang('Products')
                             </a>
                         </li>
@@ -110,16 +96,7 @@
         @yield('content')
     </div>
 
-    <!-- jQuery -->
-    <script src="{{ asset('dist/jquery-3.6.0/jquery.min.js') }}"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="{{ asset('dist/jquery-ui-1.13.1/jquery-ui.min.js') }}"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
-    </script>
-    <!-- Bootstrap 5 -->
-    <script src="{{ asset('dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('dist/js/app.js') }}"></script>
 
     @yield('POS_END')
 </body>
