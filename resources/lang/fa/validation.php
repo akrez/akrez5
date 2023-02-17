@@ -158,6 +158,12 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name' => 'نام',
+        'title' => 'عنوان',
+        'slug' => 'شعار',
+        'description' => 'توضیحات',
+        'code' => 'کد',
+    ],
 
 ];

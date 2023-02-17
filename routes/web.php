@@ -4,6 +4,11 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
+use App\Http\Middleware\CheckUserActiveBlog;
+use App\Http\Middleware\SetUserActiveBlog;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +21,15 @@ use App\Http\Controllers\SiteController;
 |
 */
 
+Route::get(RouteServiceProvider::HOME, [SiteController::class, 'index'])->name('home');
 Auth::routes(['verify' => true]);
-
-Route::get(RouteServiceProvider::HOME, [SiteController::class, 'index'])->name('home')->middleware('verified');
+Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function () {
+    Route::resource('blogs', BlogController::class);
+    Route::patch('blogs/{blog}/active', [BlogController::class, 'active'])->name('blogs.active');
+    Route::group(['middleware' => [CheckUserActiveBlog::class]], function () {
+        Route::resource('products', ProductController::class);
+        Route::put('products/{product}/active', [ProductController::class, 'active'])->name('products.active');
+        Route::get('products/{product}/tags', [TagController::class, 'productForm'])->name('products.tags.form');
+        Route::post('products/{product}/tags', [TagController::class, 'productSync'])->name('products.tags.sync');
+    });
+});
