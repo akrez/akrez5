@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Blog;
 use App\Models\Product;
 use App\Support\UserActiveBlog;
@@ -22,29 +24,23 @@ class ProductController extends Controller
         $productsGridTable = AkrezGridTable::build($products)
             ->newFieldColumn('title')
             ->newFieldColumn('code')
-            ->newTagColumn('a', __('Update'), function ($model) {
+            ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
                 return [
-                    'class' => 'btn btn-info text-light w-100',
-                    'href' => route('products.update', [
-                        'blog' => UserActiveBlog::name(),
-                        'product' => $model,
-                    ]),
+                    'href' => route('products.edit', ['product' => $model,]),
+                    'label' => __('Update'),
                 ];
-            }, '')
-            ->newTagColumn('a', __('Update'), function ($model) {
+            })
+            ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
                 return [
-                    'class' => 'btn btn-info text-light w-100',
-                    'href' => route('products.update', [
-                        'blog' => UserActiveBlog::name(),
-                        'product' => $model,
-                    ]),
+                    'href' => route('products.tags.form', ['product' => $model,]),
+                    'label' => __('Tags'),
                 ];
-            }, '')
+            })
             ->render();
 
         return view('products.index', [
-            'blogs' => $products,
-            'blogsGridTable' => $productsGridTable
+            'products' => $products,
+            'productsGridTable' => $productsGridTable
         ]);
     }
 
@@ -53,7 +49,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Blog $blog)
+    public function create()
     {
         return view('products.create');
     }
@@ -64,7 +60,7 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Blog $blog)
+    public function store(StoreProductRequest $request)
     {
         $product = new Product($request->all());
         $product->blog_name = UserActiveBlog::name();
@@ -72,7 +68,9 @@ class ProductController extends Controller
         $product->save();
         return redirect()
             ->route('products.index', ['blog' => UserActiveBlog::name()])
-            ->with('success', 'sdfsdgsfhdf dfh dfhdfhdf hdhdf hdfhdfh');
+            ->with('success', __('The :resource was created!', [
+                'resource' => $product->title,
+            ]));
     }
 
     /**
@@ -81,7 +79,7 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Blog $blog, Product $product)
+    public function show(Product $product)
     {
         //
     }
@@ -94,7 +92,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('products.edit', [
+            'product' => $product,
+        ]);
     }
 
     /**
@@ -104,9 +104,17 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $product->update($request->all());
+        $product->blog_name = UserActiveBlog::name();
+        $product->created_by = Auth::id();
+        $product->save();
+        return redirect()
+            ->route('products.index', ['blog' => UserActiveBlog::name()])
+            ->with('success', __('The :resource was updated!', [
+                'resource' => $product->title,
+            ]));
     }
 
     /**
@@ -118,5 +126,18 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    public function active(Product $product)
+    {
+        $product->is_active = !$product->is_active;
+
+        if ($product->save()) {
+            $httpStatus = 200;
+        } else {
+            $httpStatus = 500;
+        }
+
+        return response()->json([], $httpStatus);
     }
 }

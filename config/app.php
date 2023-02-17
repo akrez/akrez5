@@ -230,6 +230,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        'UserActiveBlog' => App\Support\UserActiveBlog::class,
+        'GridTable' => App\View\Components\GridTable::class,
     ],
 
 ];
