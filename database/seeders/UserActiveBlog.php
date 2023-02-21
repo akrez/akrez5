@@ -3,11 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Blog;
-use App\Models\Product;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Database\Seeder;
 
-class ProductSeeder extends Seeder
+class UserActiveBlog extends Seeder
 {
     /**
      * Run the database seeds.
@@ -19,11 +19,6 @@ class ProductSeeder extends Seeder
         $blog = Blog::query()->where('name', '=', 'shahabtahrir')->first();
         $user = User::query()->where('id', '=', $blog->created_by)->orderBy('id', 'ASC')->first();
 
-        Product::create([
-            'title' => 'پایه چسب مدل 3030',
-            'code' => '3030',
-            'blog_name' => $blog->name,
-            'created_by' => $user->id,
-        ]);
+        UserService::setActiveBlog($user, $blog);
     }
 }
