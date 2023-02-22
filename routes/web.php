@@ -8,6 +8,7 @@ use App\Http\Middleware\CheckUserActiveBlog;
 use App\Http\Middleware\SetUserActiveBlog;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\TagController;
 
 /*
@@ -31,5 +32,7 @@ Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function 
         Route::put('products/{product}/active', [ProductController::class, 'active'])->name('products.active');
         Route::get('products/{product}/tags', [TagController::class, 'productForm'])->name('products.tags.form');
         Route::post('products/{product}/tags', [TagController::class, 'productSync'])->name('products.tags.sync');
+        Route::get('products/{product}/properties', [PropertyController::class, 'productForm'])->name('products.properties.form');
+        Route::post('products/{product}/properties', [PropertyController::class, 'productSync'])->name('products.properties.sync');
     });
 });

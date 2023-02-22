@@ -26,14 +26,20 @@ class ProductController extends Controller
             ->newFieldColumn('code')
             ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
                 return [
-                    'href' => route('products.edit', ['product' => $model,]),
-                    'label' => __('Update'),
+                    'href' => route('products.tags.form', ['product' => $model,]),
+                    'label' => __('Tags'),
                 ];
             })
             ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
                 return [
-                    'href' => route('products.tags.form', ['product' => $model,]),
-                    'label' => __('Tags'),
+                    'href' => route('products.properties.form', ['product' => $model,]),
+                    'label' => __('Properties'),
+                ];
+            })
+            ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
+                return [
+                    'href' => route('products.edit', ['product' => $model,]),
+                    'label' => __('Update'),
                 ];
             })
             ->render();
