@@ -11,6 +11,7 @@ use App\Http\Controllers\Gallery\ProductGalleryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Property\ProductPropertyController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\Tag\ProductTagController;
 use App\Http\Controllers\TagController;
 
 /*
@@ -32,8 +33,9 @@ Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function 
     Route::group(['middleware' => [CheckUserActiveBlog::class]], function () {
         Route::resource('products', ProductController::class);
         Route::put('products/{product}/active', [ProductController::class, 'active'])->name('products.active');
-        Route::get('products/{product}/tags', [TagController::class, 'productForm'])->name('products.tags.form');
-        Route::post('products/{product}/tags', [TagController::class, 'productSync'])->name('products.tags.sync');
+        Route::resource('products/{product}/tags', ProductTagController::class, [
+            'as' => 'products',
+        ]);
         Route::resource('products/{product}/properties', ProductPropertyController::class, [
             'as' => 'products',
         ]);

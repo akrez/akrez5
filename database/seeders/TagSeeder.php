@@ -22,6 +22,12 @@ class TagSeeder extends Seeder
 
         $faker = Factory::create();
 
-        TagService::syncModel($faker->words(7), $product);
+        TagService::store(
+            $faker->words(7),
+            $blog->name,
+            TagService::CATEGORY_PRODUCT,
+            $product,
+            $blog->created_by
+        );
     }
 }

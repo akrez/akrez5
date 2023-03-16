@@ -3,60 +3,59 @@
 namespace App\Services;
 
 use App\Models\Tag;
+use App\Support\Helper;
 use App\Support\UserActiveBlog;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class TagService
 {
-    const DEFAULT_GLUE = PHP_EOL;
-    const DEFAULT_SEPARATORS = [PHP_EOL, ",", "،"];
+    const CATEGORY_PRODUCT = 'product';
 
-    public static function extractModelClass($model = null): string
+    const SEPARATORS = [PHP_EOL, "\t", ",", "،"];
+
+    const GLUE = "\n";
+
+    public static function parse($content)
     {
-        if (null !== $model) {
-            return get_class($model);
-        }
+        $result = Helper::iexplode(TagService::SEPARATORS, $content);
+        $result = Helper::filterArray($result);
+
+        return $result;
     }
 
-    public static function extractModelId($modelId = null, $model = null)
+    public static function getAsArray($blogName, $category, $model): array
     {
-        if (0 < strlen($modelId)) {
-            return $modelId;
-        } elseif (null !== $model and isset($model->id)) {
-            return $model->id;
-        }
-    }
-
-    public static function getAsArray($model = null, $modelId = null): array
-    {
-        return Tag::select('name')
-            ->filterModel(UserActiveBlog::name(), $model, $modelId)
-            ->pluck('name')
+        return Tag::select('value')
+            ->filterModel($blogName, $category, $model)
+            ->pluck('value')
             ->all();
     }
 
-    public static function getAsText($model = null, $modelId = null, String $glue = TagService::DEFAULT_GLUE): String
+    public static function getAsText($blogName, $category, $model): String
     {
-        return implode($glue, static::getAsArray($model, $modelId));
+        return implode(static::GLUE, static::getAsArray($blogName, $category, $model));
     }
 
-    public static function syncModel(array $names, $model = null, $modelId = null)
+    public static function store(array $values, $blogName, $category, $model, $userCreatedId)
     {
-        Tag::filterModel(UserActiveBlog::name(), $model, $modelId)->delete();
+        Tag::filterModel($blogName, $category, $model)->delete();
 
         $createdAt = Carbon::now()->format('Y-m-d H:i:s.u');
 
         $insertData = [];
-        foreach ($names as $name) {
+        foreach ($values as $value) {
             $insertData[] = [
-                'name' => $name,
-                'model_class' => static::extractModelClass($model),
-                'model_id' => static::extractModelId($modelId, $model),
                 'created_at' => $createdAt,
-                'blog_name' => UserActiveBlog::name(),
+                'created_by' => $userCreatedId,
+                'value' => $value,
+                'model_class' => Helper::extractModelClass($model),
+                'model_id' => Helper::extractModelId($model),
+                'category' => $category,
+                'blog_name' => $blogName,
             ];
         }
+
         Tag::insert($insertData);
     }
 }
