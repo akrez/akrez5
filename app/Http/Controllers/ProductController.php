@@ -32,7 +32,7 @@ class ProductController extends Controller
             })
             ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
                 return [
-                    'href' => route('products.tags.form', ['product' => $model,]),
+                    'href' => route('products.tags.index', ['product' => $model,]),
                     'label' => __('Tags'),
                 ];
             })
