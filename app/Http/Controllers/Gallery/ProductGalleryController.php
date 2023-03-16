@@ -57,7 +57,7 @@ class ProductGalleryController extends Controller
             })
             ->render();
 
-        return view('galleries.product.index', [
+        return view('galleries.products.index', [
             'product' => $product,
             'galleries' => $galleries,
             'galleriesGridTable' => $galleriesGridTable,
@@ -114,7 +114,7 @@ class ProductGalleryController extends Controller
     {
         $gallery = static::findQuery($product)->findOrFail($gallery->id);
 
-        return view('galleries.product.edit', [
+        return view('galleries.products.edit', [
             'product' => $product,
             'gallery' => $gallery,
         ]);

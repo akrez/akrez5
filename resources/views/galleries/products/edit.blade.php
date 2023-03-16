@@ -4,7 +4,7 @@
 @section('subheader', $product->title . ' / ' . $gallery->name)
 
 @section('content')
-    @include('galleries.product._form', [
+    @include('galleries.products._form', [
         'gallery' => $gallery,
         'isCreate' => false,
         'action' => route('products.galleries.update', [

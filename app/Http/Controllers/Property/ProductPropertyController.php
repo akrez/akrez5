@@ -18,7 +18,7 @@ class ProductPropertyController extends Controller
      */
     public function index(Product $product): \Illuminate\Contracts\View\View
     {
-        return view('properties.product.index', [
+        return view('properties.products.index', [
             'content' => PropertyService::getAsText(UserActiveBlog::name(), PropertyService::CATEGORY_PRODUCT, $product),
             'product' => $product,
         ]);

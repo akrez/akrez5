@@ -13,7 +13,7 @@
 @section('subheader', $product->title)
 
 @section('content')
-    @include('galleries.product._form', [
+    @include('galleries.products._form', [
         'isCreate' => true,
         'action' => route('products.galleries.store', [
             'product' => $product->id,
