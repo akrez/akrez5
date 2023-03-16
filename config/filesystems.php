@@ -30,6 +30,12 @@ return [
 
     'disks' => [
 
+        'test' => [
+            'driver' => 'local',
+            'root' => public_path(),
+            'url' => env('APP_URL'),
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
@@ -38,7 +44,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
 
@@ -51,6 +57,14 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+        ],
+
+        'ftp' => [
+            'driver' => 'ftp',
+            'host' => env('FTP_HOST'),
+            'username' => env('FTP_USERNAME'),
+            'password' => env('FTP_PASSWORD'),
+            'url' => env('FTP_URL'),
         ],
 
     ],

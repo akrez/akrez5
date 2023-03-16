@@ -17,8 +17,16 @@
         $row = true;
     }
     
+    if (!isset($mt)) {
+        $mt = 2;
+    }
+    
     if (!isset($size)) {
         $size = 4;
+    }
+    
+    if (!isset($visible)) {
+        $visible = true;
     }
     
     if (!isset($errorsArray)) {
@@ -34,33 +42,46 @@
     }
 @endphp
 
-@if ($row)
-    <div class="row">
-@endif
-<div class="col-md-{{ $size }} mt-2">
-    @if ('textarea' == $type)
-        <div class="form-group">
-            @if ($label)
-                <label class="form-label" for="{{ $id }}">{{ $label }}</label>
-            @endif
-            <textarea name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}">{{ $inputValue }}</textarea>
-            @foreach ($errorsArray as $error)
-                <div class="invalid-feedback">{{ $error }}</div>
-            @endforeach
-        </div>
-    @else
-        <div class="form-group">
-            @if ($label)
-                <label class="form-label" for="{{ $id }}">{{ $label }}</label>
-            @endif
-            <input name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
-                class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
-            @foreach ($errorsArray as $error)
-                <div class="invalid-feedback">{{ $error }}</div>
-            @endforeach
+@if ($visible)
+    @if ($row)
+        <div class="row">
+    @endif
+    <div class="col-md-{{ $size }} mt-{{ $mt }}">
+        @if ('textarea' == $type)
+            <div class="form-group">
+                @if ($label)
+                    <label class="form-label" for="{{ $id }}">{{ $label }}</label>
+                @endif
+                <textarea name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}">{{ $inputValue }}</textarea>
+                @foreach ($errorsArray as $error)
+                    <div class="invalid-feedback">{{ $error }}</div>
+                @endforeach
+            </div>
+        @elseif ('file' == $type)
+            <div class="form-group">
+                @if ($label)
+                    <label class="form-label" for="{{ $id }}">{{ $label }}</label>
+                @endif
+                <input name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
+                    class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
+                @foreach ($errorsArray as $error)
+                    <div class="invalid-feedback">{{ $error }}</div>
+                @endforeach
+            </div>
+        @else
+            <div class="form-group">
+                @if ($label)
+                    <label class="form-label" for="{{ $id }}">{{ $label }}</label>
+                @endif
+                <input name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
+                    class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
+                @foreach ($errorsArray as $error)
+                    <div class="invalid-feedback">{{ $error }}</div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+    @if ($row)
         </div>
     @endif
-</div>
-@if ($row)
-    </div>
 @endif

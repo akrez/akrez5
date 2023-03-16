@@ -14,8 +14,10 @@ class Property extends Model
 
     const UPDATED_AT = null;
 
-    public function scopeFilterModel($query, $model = null, $modelId = null)
+    public function scopeFilterModel($query, $blogname, $model = null, $modelId = null)
     {
+        $query->where('blog_name', $blogname);
+
         $modelClassQuery = PropertyService::extractModelClass($model);
         if (null !== $modelClassQuery) {
             $query->where('model_class', $modelClassQuery);

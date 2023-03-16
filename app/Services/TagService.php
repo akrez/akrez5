@@ -31,7 +31,7 @@ class TagService
     public static function getAsArray($model = null, $modelId = null): array
     {
         return Tag::select('name')
-            ->filterModel($model, $modelId)
+            ->filterModel(UserActiveBlog::name(), $model, $modelId)
             ->pluck('name')
             ->all();
     }
@@ -43,7 +43,7 @@ class TagService
 
     public static function syncModel(array $names, $model = null, $modelId = null)
     {
-        Tag::filterModel($model, $modelId)->delete();
+        Tag::filterModel(UserActiveBlog::name(), $model, $modelId)->delete();
 
         $createdAt = Carbon::now()->format('Y-m-d H:i:s.u');
 

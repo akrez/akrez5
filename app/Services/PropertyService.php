@@ -32,7 +32,7 @@ class PropertyService
 
     public static function getAsArray($model = null, $modelId = null): array
     {
-        $properties = Property::filterModel($model, $modelId)->get();
+        $properties = Property::filterModel(UserActiveBlog::name(), $model, $modelId)->get();
         //
         $result = [];
         foreach ($properties as $property) {
@@ -63,7 +63,7 @@ class PropertyService
 
     public static function syncModel(array $keysValues, $model = null, $modelId = null)
     {
-        Property::filterModel($model, $modelId)->delete();
+        Property::filterModel(UserActiveBlog::name(), $model, $modelId)->delete();
 
         $createdAt = Carbon::now()->format('Y-m-d H:i:s.u');
 
