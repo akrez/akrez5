@@ -4,14 +4,14 @@
 @section('subheader', $product->title)
 
 @section('content')
-    <form enctype="multipart/form-data" action="{{ route('products.properties.sync', ['product' => $product->id]) }}" method="POST">
+    <form enctype="multipart/form-data" action="{{ route('products.properties.store', ['product' => $product->id]) }}" method="POST">
         @csrf
         @include('components/formBuilder', [
             'type' => 'textarea',
-            'name' => 'properties',
-            'value' => $propertiesTextareaValue,
+            'name' => 'content',
+            'value' => $content,
             'label' => __('Properties'),
-            'errorsArray' => $errors->get('properties'),
+            'errorsArray' => $errors->get('content'),
         ])
         @include('components/formBuilder', [
             'type' => 'submit',

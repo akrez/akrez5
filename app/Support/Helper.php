@@ -47,4 +47,22 @@ class Helper
     {
         return $const + array_intersect_key($values, $template) + $template;
     }
+
+    public static function extractModelClass($model = null): string
+    {
+        if (null !== $model) {
+            return get_class($model);
+        }
+    }
+
+    public static function extractModelId($model = null)
+    {
+        if (null !== $model) {
+            if (isset($model->id)) {
+                return $model->id;
+            } elseif (isset($model->name)) {
+                return $model->name;
+            }
+        }
+    }
 }

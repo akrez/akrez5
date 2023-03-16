@@ -3,36 +3,59 @@
 namespace App\Services;
 
 use App\Models\Property;
+use App\Support\Helper;
 use App\Support\UserActiveBlog;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PropertyService
 {
-    const DEFAULT_LINE_SEPARATOR = PHP_EOL;
-    const DEFAULT_KEY_VALUES_SEPARATOR = ':';
-    const DEFAULT_VALUES_SEPARATOR = ",";
-    const DEFAULT_VALUES_SEPARATORS = [",", "،"];
-    const DEFAULT_GLUE = PHP_EOL;
+    const SEPARATOR_LINES = [PHP_EOL];
+    const SEPARATOR_KEY_VALUES = [":", "\t"];
+    const SEPARATOR_VALUES = [",", "،", "\t"];
 
-    public static function extractModelClass($model = null): string
+    const GLUE_LINES = PHP_EOL;
+    const GLUE_KEY_VALUES = ":";
+    const GLUE_VALUES = ",";
+
+    public static function parse($content)
     {
-        if (null !== $model) {
-            return get_class($model);
+        $result = [];
+        //
+        $lines = Helper::iexplode(PropertyService::SEPARATOR_LINES, $content);
+        $lines = Helper::filterArray($lines);
+        //
+        foreach ($lines as $lineAsText) {
+            $line = Helper::iexplode(PropertyService::SEPARATOR_KEY_VALUES, $lineAsText, 2);
+            $line = Helper::filterArray($line);
+            $line = $line + [0 => '', 1 => ''];
+            //
+            $key = $line[0];
+            if (empty($key)) {
+                continue;
+            }
+            //
+            $values = Helper::iexplode(PropertyService::SEPARATOR_VALUES, $line[1]);
+            $values = Helper::filterArray($values);
+            if (empty($values)) {
+                continue;
+            }
+            //
+            if (isset($result[$key]['values'])) {
+                $values = array_merge($result[$key]['values'], $values);
+                $values = Helper::filterArray($values);
+            }
+            $result[$key] = [
+                'key' => $key,
+                'values' => $values,
+            ];
         }
+        return $result;
     }
 
-    public static function extractModelId($modelId = null, $model = null)
+    public static function getAsArray($blogName, $category, $model): array
     {
-        if (0 < strlen($modelId)) {
-            return $modelId;
-        } elseif (null !== $model and isset($model->id)) {
-            return $model->id;
-        }
-    }
-
-    public static function getAsArray($model = null, $modelId = null): array
-    {
-        $properties = Property::filterModel(UserActiveBlog::name(), $model, $modelId)->get();
+        $properties = Property::filterModel($blogName, $category, $model)->get();
         //
         $result = [];
         foreach ($properties as $property) {
@@ -49,21 +72,21 @@ class PropertyService
         return array_values($result);
     }
 
-    public static function getAsText($model = null, $modelId = null, String $glue = PropertyService::DEFAULT_GLUE): String
+    public static function getAsText($blogName, $category, $model): String
     {
-        $items = static::getAsArray($model, $modelId);
+        $items = static::getAsArray($blogName, $category, $model);
         //
         $result = [];
         foreach ($items as $item) {
-            $result[] = $item['key'] . static::DEFAULT_KEY_VALUES_SEPARATOR . implode(static::DEFAULT_VALUES_SEPARATOR, $item['values']);
+            $result[] = $item['key'] . static::GLUE_KEY_VALUES . implode(static::GLUE_VALUES, $item['values']);
         }
         //
-        return implode(static::DEFAULT_LINE_SEPARATOR, $result);
+        return implode(static::GLUE_LINES, $result);
     }
 
-    public static function syncModel(array $keysValues, $model = null, $modelId = null)
+    public static function store(array $keysValues, $blogName, $category, $model)
     {
-        Property::filterModel(UserActiveBlog::name(), $model, $modelId)->delete();
+        Property::filterModel($blogName, $category, $model)->delete();
 
         $createdAt = Carbon::now()->format('Y-m-d H:i:s.u');
 
@@ -72,10 +95,12 @@ class PropertyService
             foreach ($keyValues['values'] as $value) {
                 $insertData[] = [
                     'created_at' => $createdAt,
+                    'created_by' => Auth::id(),
                     'key' => $keyValues['key'],
                     'value' => $value,
-                    'model_class' => static::extractModelClass($model),
-                    'model_id' => static::extractModelId($modelId, $model),
+                    'model_class' => Helper::extractModelClass($model),
+                    'model_id' => Helper::extractModelId($model),
+                    'category' => $category,
                     'blog_name' => UserActiveBlog::name(),
                 ];
             }
