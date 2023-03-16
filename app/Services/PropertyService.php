@@ -4,12 +4,12 @@ namespace App\Services;
 
 use App\Models\Property;
 use App\Support\Helper;
-use App\Support\UserActiveBlog;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 class PropertyService
 {
+    const CATEGORY_PRODUCT = 'product';
+
     const SEPARATOR_LINES = [PHP_EOL];
     const SEPARATOR_KEY_VALUES = [":", "\t"];
     const SEPARATOR_VALUES = [",", "،", "\t"];
@@ -74,17 +74,17 @@ class PropertyService
 
     public static function getAsText($blogName, $category, $model): String
     {
-        $items = static::getAsArray($blogName, $category, $model);
+        $items = PropertyService::getAsArray($blogName, $category, $model);
         //
         $result = [];
         foreach ($items as $item) {
-            $result[] = $item['key'] . static::GLUE_KEY_VALUES . implode(static::GLUE_VALUES, $item['values']);
+            $result[] = $item['key'] . PropertyService::GLUE_KEY_VALUES . implode(PropertyService::GLUE_VALUES, $item['values']);
         }
         //
-        return implode(static::GLUE_LINES, $result);
+        return implode(PropertyService::GLUE_LINES, $result);
     }
 
-    public static function store(array $keysValues, $blogName, $category, $model)
+    public static function store(array $keysValues, $blogName, $category, $model, $userCreatedId)
     {
         Property::filterModel($blogName, $category, $model)->delete();
 
@@ -95,13 +95,13 @@ class PropertyService
             foreach ($keyValues['values'] as $value) {
                 $insertData[] = [
                     'created_at' => $createdAt,
-                    'created_by' => Auth::id(),
+                    'created_by' => $userCreatedId,
                     'key' => $keyValues['key'],
                     'value' => $value,
                     'model_class' => Helper::extractModelClass($model),
                     'model_id' => Helper::extractModelId($model),
                     'category' => $category,
-                    'blog_name' => UserActiveBlog::name(),
+                    'blog_name' => $blogName,
                 ];
             }
         }

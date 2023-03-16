@@ -23,7 +23,7 @@ class PropertySeeder extends Seeder
 
         $faker = Factory::create();
 
-        PropertyService::syncModel([
+        PropertyService::store([
             [
                 'key' => $faker->words(1, true),
                 'values' => $faker->words(7),
@@ -36,6 +36,6 @@ class PropertySeeder extends Seeder
                 'key' => $faker->words(1, true),
                 'values' => $faker->words(7),
             ],
-        ], $product);
+        ], $blog->name, PropertyService::CATEGORY_PRODUCT, $product, $blog->created_by);
     }
 }

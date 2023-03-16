@@ -7,11 +7,10 @@ use App\Http\Requests\StorePropertyRequest;
 use App\Models\Product;
 use App\Services\PropertyService;
 use App\Support\UserActiveBlog;
+use Illuminate\Support\Facades\Auth;
 
 class ProductPropertyController extends Controller
 {
-    const CATEGORY = 'product';
-
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +19,7 @@ class ProductPropertyController extends Controller
     public function index(Product $product): \Illuminate\Contracts\View\View
     {
         return view('properties.product.index', [
-            'content' => PropertyService::getAsText(UserActiveBlog::name(), static::CATEGORY, $product),
+            'content' => PropertyService::getAsText(UserActiveBlog::name(), PropertyService::CATEGORY_PRODUCT, $product),
             'product' => $product,
         ]);
     }
@@ -42,7 +41,7 @@ class ProductPropertyController extends Controller
      */
     public function store(StorePropertyRequest $request, Product $product)
     {
-        PropertyService::store($request->contentAsArray, UserActiveBlog::name(), static::CATEGORY, $product);
+        PropertyService::store($request->contentAsArray, UserActiveBlog::name(), PropertyService::CATEGORY_PRODUCT, $product, Auth::id());
         return redirect()->back();
     }
 
