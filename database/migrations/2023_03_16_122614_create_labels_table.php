@@ -15,7 +15,7 @@ class CreateLabelsTable extends Migration
     {
         Schema::create('labels', function (Blueprint $table) {
             $table->id();
-            $table->string('category')->nullable();
+            $table->string('category');
             $table->string('model_class')->nullable();
             $table->integer('model_id')->nullable();
             $table->string('key')->nullable();
