@@ -10,12 +10,13 @@ use App\Models\Product;
 use App\Services\GalleryService;
 use App\Support\UserActiveBlog;
 use App\View\Components\AkrezGridTable;
+use Illuminate\Support\Facades\Auth;
 
 class ProductGalleryController extends Controller
 {
     protected function findQuery(Product $product): \Illuminate\Database\Eloquent\Builder
     {
-        return Gallery::filterModel(UserActiveBlog::name(), $product)
+        return Gallery::filterModel(UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT, $product)
             ->orderBy('seq', 'desc')
             ->orderBy('created_at', 'asc');
     }
@@ -83,7 +84,7 @@ class ProductGalleryController extends Controller
     {
         $file = $request->file('image');
 
-        GalleryService::store(GalleryService::CATEGORY_PRODUCT, $request, $file, $product);
+        GalleryService::store($request->validated(), $file,  UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT, $product, Auth::id());
 
         return redirect()
             ->route('products.galleries.index', [

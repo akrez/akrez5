@@ -2,49 +2,22 @@
 
 namespace App\Services;
 
-use App\Http\Requests\StoreGalleryRequest;
 use App\Models\Gallery;
-use App\Models\Product;
+use App\Support\Helper;
 use App\Support\UserActiveBlog;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Foundation\Auth\User;
 use Intervention\Image\Facades\Image;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class GalleryService
 {
-
     const CATEGORY_PRODUCT = 'product';
 
     public static function getStorageDisk(): Filesystem
     {
         $diskName = env('FILESYSTEM_DRIVER');
         return Storage::disk($diskName);
-    }
-
-    public static function extractModelClass($model = null): string
-    {
-        if (null !== $model) {
-            return get_class($model);
-        }
-
-        return null;
-    }
-
-    public static function extractModelId($modelId = null, $model = null)
-    {
-        if (0 < strlen($modelId)) {
-            return $modelId;
-        } elseif (null !== $model and isset($model->id)) {
-            return $model->id;
-        } elseif (null !== $model and isset($model->name)) {
-            return $model->name;
-        }
-
-        return null;
     }
 
     public static function getValidationRules()
@@ -66,12 +39,12 @@ class GalleryService
     public static function delete(Gallery $gallery)
     {
         if ($gallery->delete()) {
-            $path = static::getUri($gallery->blog_name, $gallery->name);
+            $path = static::getUri($gallery->blog_name, $gallery->value);
             static::getStorageDisk()->delete($path);
         }
     }
 
-    public static function store($category, StoreGalleryRequest $request, UploadedFile $file, $model, $modelId = null)
+    public static function store(array $attributes, $file, $blogName, $category, $model, $userCreatedId)
     {
         $image = Image::make($file);
         $ext = static::getExtensionByMime($image->mime());
@@ -80,14 +53,14 @@ class GalleryService
             $name = static::generateImageFileName($ext);
         } while (Gallery::filterName($name)->first());
 
-        $gallery = new Gallery($request->validated());
-        $gallery->blog_name = UserActiveBlog::name();
-        $gallery->model_class = static::extractModelClass($model);
-        $gallery->model_id = static::extractModelId($modelId, $model);
+        $gallery = new Gallery($attributes);
+        $gallery->blog_name = $blogName;
+        $gallery->model_class = Helper::extractModelClass($model);
+        $gallery->model_id = Helper::extractModelId($model);
         $gallery->category = $category;
         $gallery->name = $name;
         $gallery->ext = $ext;
-        $gallery->created_by = Auth::id();
+        $gallery->created_by = $userCreatedId;
         $gallery->created_at = Carbon::now()->format('Y-m-d H:i:s.u');
         if ($gallery->save()) {
             $path = static::getUri($gallery->blog_name, $gallery->name);

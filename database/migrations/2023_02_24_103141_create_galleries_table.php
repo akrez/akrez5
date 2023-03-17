@@ -18,8 +18,8 @@ class CreateGalleriesTable extends Migration
             $table->string('blog_name', 60)->nullable();
             $table->string('model_class')->nullable();
             $table->integer('model_id')->nullable();
-            $table->string('category', 60)->nullable();
-            $table->string('name', 60);
+            $table->string('category')->nullable();
+            $table->string('name');
             $table->string('ext', 8);
             $table->decimal('seq')->nullable();
             $table->integer('created_by')->nullable();
