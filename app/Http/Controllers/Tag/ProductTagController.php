@@ -19,7 +19,7 @@ class ProductTagController extends Controller
     public function index(Product $product): \Illuminate\Contracts\View\View
     {
         return view('tags.products.index', [
-            'content' => TagService::getAsText(UserActiveBlog::name(), TagService::CATEGORY_PRODUCT, $product),
+            'content' => TagService::getAsText(UserActiveBlog::name(), TagService::CATEGORY_PRODUCT_TAG, $product),
             'product' => $product,
         ]);
     }
@@ -41,7 +41,7 @@ class ProductTagController extends Controller
      */
     public function store(StoreTagRequest $request, Product $product)
     {
-        TagService::store($request->contentAsArray, UserActiveBlog::name(), TagService::CATEGORY_PRODUCT, $product, Auth::id());
+        TagService::store($request->contentAsArray, UserActiveBlog::name(), TagService::CATEGORY_PRODUCT_TAG, $product, Auth::id());
         return redirect()->back();
     }
 

@@ -36,6 +36,6 @@ class PropertySeeder extends Seeder
                 'key' => $faker->words(1, true),
                 'values' => $faker->words(7),
             ],
-        ], $blog->name, PropertyService::CATEGORY_PRODUCT, $product, $blog->created_by);
+        ], $blog->name, PropertyService::CATEGORY_PRODUCT_PROPERTY, $product, $blog->created_by);
     }
 }

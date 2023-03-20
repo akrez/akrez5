@@ -3,11 +3,7 @@
 namespace App\Services;
 
 use App\Models\Blog;
-use App\Models\Tag;
 use App\Models\User;
-use App\Support\UserActiveBlog;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Validator;
 
 class UserService
 {

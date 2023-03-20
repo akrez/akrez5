@@ -25,7 +25,7 @@ class TagSeeder extends Seeder
         TagService::store(
             $faker->words(7),
             $blog->name,
-            TagService::CATEGORY_PRODUCT,
+            TagService::CATEGORY_PRODUCT_TAG,
             $product,
             $blog->created_by
         );

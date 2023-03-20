@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 
 class PropertyService
 {
-    const CATEGORY_PRODUCT = 'product';
+    const CATEGORY_PRODUCT_PROPERTY = 'product_property';
 
     const SEPARATOR_LINES = [PHP_EOL];
     const SEPARATOR_KEY_VALUES = [":", "\t"];

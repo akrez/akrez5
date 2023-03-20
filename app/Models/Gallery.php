@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Services\GalleryService;
+use Illuminate\Database\Eloquent\Builder;
 use App\Support\Helper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,16 +13,20 @@ class Gallery extends Model
     use HasFactory;
     use SoftDeletes;
 
-    const UPDATED_AT = null;
+    public const UPDATED_AT = null;
 
-    protected $fillable = ['seq',];
+    protected $fillable = ['seq'];
 
-    public function scopeFilterModel($query, $blogName, $category, $model)
+    public function scopeFilterModel(Builder $query, $blogName, $category, $model)
     {
         $query->where('blog_name', $blogName);
         $query->where('category', $category);
         $query->where('model_class', Helper::extractModelClass($model));
-        $query->where('model_id', Helper::extractModelId($model));
+        if (isset($model->id)) {
+            $query->where('model_id', Helper::extractModelId($model));
+        } else {
+            $query->whereIsNull('model_id');
+        }
     }
 
     public function scopeFilterName($query, $name = null)

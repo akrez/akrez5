@@ -19,7 +19,7 @@ class ProductPropertyController extends Controller
     public function index(Product $product): \Illuminate\Contracts\View\View
     {
         return view('properties.products.index', [
-            'content' => PropertyService::getAsText(UserActiveBlog::name(), PropertyService::CATEGORY_PRODUCT, $product),
+            'content' => PropertyService::getAsText(UserActiveBlog::name(), PropertyService::CATEGORY_PRODUCT_PROPERTY, $product),
             'product' => $product,
         ]);
     }
@@ -41,7 +41,7 @@ class ProductPropertyController extends Controller
      */
     public function store(StorePropertyRequest $request, Product $product)
     {
-        PropertyService::store($request->contentAsArray, UserActiveBlog::name(), PropertyService::CATEGORY_PRODUCT, $product, Auth::id());
+        PropertyService::store($request->contentAsArray, UserActiveBlog::name(), PropertyService::CATEGORY_PRODUCT_PROPERTY, $product, Auth::id());
         return redirect()->back();
     }
 

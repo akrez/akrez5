@@ -16,7 +16,7 @@ class ProductGalleryController extends Controller
 {
     protected function findQuery(Product $product): \Illuminate\Database\Eloquent\Builder
     {
-        return Gallery::filterModel(UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT, $product)
+        return Gallery::filterModel(UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT_GALLERY, $product)
             ->orderBy('seq', 'desc')
             ->orderBy('created_at', 'asc');
     }
@@ -84,7 +84,7 @@ class ProductGalleryController extends Controller
     {
         $file = $request->file('image');
 
-        GalleryService::store($request->validated(), $file,  UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT, $product, Auth::id());
+        GalleryService::store($request->validated(), $file,  UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT_GALLERY, $product, Auth::id());
 
         return redirect()
             ->route('products.galleries.index', [

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 
 class GalleryService
 {
-    const CATEGORY_PRODUCT = 'product';
+    const CATEGORY_PRODUCT_GALLERY = 'product_gallery';
 
     public static function getStorageDisk(): Filesystem
     {

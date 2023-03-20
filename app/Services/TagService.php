@@ -4,13 +4,12 @@ namespace App\Services;
 
 use App\Models\Tag;
 use App\Support\Helper;
-use App\Support\UserActiveBlog;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Validator;
 
 class TagService
 {
-    const CATEGORY_PRODUCT = 'product';
+    const CATEGORY_PRODUCT_TAG = 'product_tag';
+    const CATEGORY_BLOG_KEYWORD = 'blog_keyword';
 
     const SEPARATORS = [PHP_EOL, "\t", ",", "،"];
 
