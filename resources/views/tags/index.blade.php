@@ -1,17 +1,16 @@
 @extends('site')
 
-@section('header', __('Edit :resource', ['resource' => __('Tags')]))
-@section('subheader', $product->title)
+@section('header', __('Edit :resource', ['resource' => $label]))
+@section('subheader', $subheader)
 
 @section('content')
-    <form enctype="multipart/form-data" action="{{ route('products.tags.store', ['product' => $product->id]) }}"
-        method="POST">
+    <form enctype="multipart/form-data" action="{{ $action }}" method="POST">
         @csrf
         @include('components/formBuilder', [
             'type' => 'textarea',
             'name' => 'content',
             'value' => $content,
-            'label' => __('Tags'),
+            'label' => $label,
             'errorsArray' => $errors->get('content'),
         ])
         @include('components/formBuilder', [

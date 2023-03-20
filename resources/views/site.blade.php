@@ -76,9 +76,27 @@
                 </button>
                 <div class="collapse navbar-collapse" id="mynavbar">
                     <ul class="navbar-nav me-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @lang('Blog')
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('blogs.edit', ['blog' => UserActiveBlog::get()]) }}">@lang('Edit')</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('blogs.keywords.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Keywords')</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item">
-                            <a href="{{ route('products.index') }}"
-                            class="nav-link">
+                            <a href="{{ route('products.index') }}" class="nav-link">
                                 @lang('Products')
                             </a>
                         </li>
