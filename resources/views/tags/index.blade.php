@@ -12,6 +12,7 @@
             'value' => $content,
             'label' => $label,
             'errorsArray' => $errors->get('content'),
+            'textareaRows' => substr_count($content, "\n") + 2,
         ])
         @include('components/formBuilder', [
             'type' => 'submit',

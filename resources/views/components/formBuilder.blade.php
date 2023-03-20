@@ -25,6 +25,10 @@
         $size = 4;
     }
     
+    if (!isset($textareaRows)) {
+        $textareaRows = 4;
+    }
+    
     if (!isset($visible)) {
         $visible = true;
     }
@@ -52,7 +56,8 @@
                 @if ($label)
                     <label class="form-label" for="{{ $id }}">{{ $label }}</label>
                 @endif
-                <textarea name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}">{{ $inputValue }}</textarea>
+                <textarea name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}"
+                    rows="{{ $textareaRows }}">{{ $inputValue }}</textarea>
                 @foreach ($errorsArray as $error)
                     <div class="invalid-feedback">{{ $error }}</div>
                 @endforeach
