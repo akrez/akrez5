@@ -23,7 +23,7 @@ class Tag extends Model
         if (isset($model->id)) {
             $query->where('model_id', Helper::extractModelId($model));
         } else {
-            $query->whereIsNull('model_id');
+            $query->whereNull('model_id');
         }
     }
 }
