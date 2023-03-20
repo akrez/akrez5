@@ -4,25 +4,26 @@ namespace App\Http\Controllers\Tag;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTagRequest;
-use App\Models\Product;
 use App\Services\TagService;
 use App\Support\UserActiveBlog;
 use Illuminate\Support\Facades\Auth;
 
-class ProductTagController extends Controller
+class BlogKeywordController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Product $product): \Illuminate\Contracts\View\View
+    public function index(): \Illuminate\Contracts\View\View
     {
+        $model = UserActiveBlog::get();
+
         return view('tags.index', [
-            'label' => __('Tags'),
-            'subheader' => $product->title,
-            'content' => TagService::getAsText(UserActiveBlog::name(), TagService::CATEGORY_PRODUCT_TAG, $product),
-            'action' => route('products.tags.store', ['product' => $product->id]),
+            'label' => __('Keywords'),
+            'subheader' => $model->title,
+            'content' => TagService::getAsText(UserActiveBlog::name(), TagService::CATEGORY_BLOG_KEYWORD, $model),
+            'action' => route('blogs.keywords.store', ['blog' => $model]),
         ]);
     }
 
@@ -31,7 +32,7 @@ class ProductTagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreTagRequest $request, Product $product)
+    public function create(StoreTagRequest $request)
     {
     }
 
@@ -40,11 +41,13 @@ class ProductTagController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Replasponse
      */
-    public function store(StoreTagRequest $request, Product $product)
+    public function store(StoreTagRequest $request)
     {
-        TagService::store($request->contentAsArray, UserActiveBlog::name(), TagService::CATEGORY_PRODUCT_TAG, $product, Auth::id());
+        $model = UserActiveBlog::get();
+
+        TagService::store($request->contentAsArray, UserActiveBlog::name(), TagService::CATEGORY_BLOG_KEYWORD, $model, Auth::id());
 
         return redirect()->back();
     }
@@ -54,7 +57,7 @@ class ProductTagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show()
     {
     }
 
@@ -63,7 +66,7 @@ class ProductTagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit()
     {
     }
 
@@ -74,7 +77,7 @@ class ProductTagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreTagRequest $request, Product $product)
+    public function update(StoreTagRequest $request)
     {
     }
 
@@ -83,7 +86,7 @@ class ProductTagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy()
     {
     }
 }

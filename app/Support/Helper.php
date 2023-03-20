@@ -9,15 +9,15 @@ class Helper
         if (!is_array($delimiters)) {
             $delimiters = [$delimiters];
         }
-        $del = reset($delimiters);
-        //
+        $delimiter = reset($delimiters);
+
         $result = [];
         $maskedString = $string;
         while (count($result) + 1 < $limit) {
             $c = 1;
-            $maskedStringExploded = str_replace($delimiters, $del, $maskedString, $c);
-            $maskedStringExploded = explode($del, $maskedStringExploded, 2);
-            if (count($maskedStringExploded) == 2) {
+            $maskedStringExploded = str_replace($delimiters, $delimiter, $maskedString, $c);
+            $maskedStringExploded = explode($delimiter, $maskedStringExploded, 2);
+            if (2 == count($maskedStringExploded)) {
                 $result[] = $maskedStringExploded[0];
                 $maskedString = $maskedStringExploded[1];
             } else {
@@ -26,6 +26,7 @@ class Helper
             }
         }
         $result[] = $maskedString;
+
         return $result;
     }
 
@@ -40,6 +41,7 @@ class Helper
         if ($doFilter) {
             $array = array_filter($array, 'strlen');
         }
+
         return $array;
     }
 
@@ -57,12 +59,8 @@ class Helper
 
     public static function extractModelId($model = null)
     {
-        if (null !== $model) {
-            if (isset($model->id)) {
-                return $model->id;
-            } elseif (isset($model->name)) {
-                return $model->name;
-            }
+        if (null !== $model and isset($model->id)) {
+            return $model->id;
         }
     }
 }
