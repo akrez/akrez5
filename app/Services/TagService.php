@@ -8,12 +8,12 @@ use Illuminate\Support\Carbon;
 
 class TagService
 {
-    const CATEGORY_PRODUCT_TAG = 'product_tag';
-    const CATEGORY_BLOG_KEYWORD = 'blog_keyword';
+    public const CATEGORY_PRODUCT_CATEGORY = 'product_label';
+    public const CATEGORY_BLOG_KEYWORD = 'blog_keyword';
 
-    const SEPARATORS = [PHP_EOL, "\t", ",", "،"];
+    public const SEPARATORS = [PHP_EOL, "\t", ',', '،'];
 
-    const GLUE = "\n";
+    public const GLUE = "\n";
 
     public static function parse($content)
     {
@@ -31,7 +31,7 @@ class TagService
             ->all();
     }
 
-    public static function getAsText($blogName, $category, $model): String
+    public static function getAsText($blogName, $category, $model): string
     {
         return implode(static::GLUE, static::getAsArray($blogName, $category, $model));
     }

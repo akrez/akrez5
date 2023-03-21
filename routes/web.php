@@ -7,7 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Property\ProductPropertyController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Tag\BlogKeywordController;
-use App\Http\Controllers\Tag\ProductTagController;
+use App\Http\Controllers\Tag\ProductCategoryController;
 use App\Http\Middleware\CheckUserActiveBlog;
 use App\Http\Middleware\SetUserActiveBlog;
 use App\Providers\RouteServiceProvider;
@@ -35,7 +35,7 @@ Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function 
         Route::put('products/{product}/active', [ProductController::class, 'active'])->name('products.active');
         Route::resource('blogs/{blog}/keywords', BlogKeywordController::class, ['as' => 'blogs']);
         Route::resource('blogs/{blog}/logos', BlogLogoController::class, ['as' => 'blogs']);
-        Route::resource('products/{product}/tags', ProductTagController::class, ['as' => 'products']);
+        Route::resource('products/{product}/categories', ProductCategoryController::class, ['as' => 'products']);
         Route::resource('products/{product}/properties', ProductPropertyController::class, ['as' => 'products']);
         Route::resource('products/{product}/images', ProductImageController::class, ['as' => 'products']);
     });
