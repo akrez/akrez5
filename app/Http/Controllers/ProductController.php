@@ -27,7 +27,7 @@ class ProductController extends Controller
             ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
                 return [
                     'href' => route('products.images.index', ['product' => $model,]),
-                    'label' => __('Images'),
+                    'label' => __(':resource galleries', ['resource' => __('Product')]),
                 ];
             })
             ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
