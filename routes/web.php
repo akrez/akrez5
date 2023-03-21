@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Gallery\BlogLogoController;
-use App\Http\Controllers\Gallery\ProductGalleryController;
+use App\Http\Controllers\Gallery\ProductImageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Property\ProductPropertyController;
 use App\Http\Controllers\SiteController;
@@ -37,6 +37,6 @@ Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function 
         Route::resource('blogs/{blog}/logos', BlogLogoController::class, ['as' => 'blogs']);
         Route::resource('products/{product}/tags', ProductTagController::class, ['as' => 'products']);
         Route::resource('products/{product}/properties', ProductPropertyController::class, ['as' => 'products']);
-        Route::resource('products/{product}/galleries', ProductGalleryController::class, ['as' => 'products']);
+        Route::resource('products/{product}/images', ProductImageController::class, ['as' => 'products']);
     });
 });

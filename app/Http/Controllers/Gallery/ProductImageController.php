@@ -12,11 +12,11 @@ use App\Support\UserActiveBlog;
 use App\View\Components\AkrezGridTable;
 use Illuminate\Support\Facades\Auth;
 
-class ProductGalleryController extends Controller
+class ProductImageController extends Controller
 {
     protected function findQuery(Product $product): \Illuminate\Database\Eloquent\Builder
     {
-        return Gallery::filterModel(UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT_GALLERY, $product)
+        return Gallery::filterModel(UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT_IMAGE, $product)
             ->orderBy('seq', 'desc')
             ->orderBy('created_at', 'asc');
     }
@@ -41,7 +41,7 @@ class ProductGalleryController extends Controller
             ->newRawColumn('{{ $model->is_main ? __("Yes") : __("No") }}', [], __('validation.attributes.is_main'))
             ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>', function ($model) use ($product) {
                 return [
-                    'href' => route('products.galleries.edit', ['product' => $product, 'gallery' => $model]),
+                    'href' => route('products.images.edit', ['product' => $product, 'image' => $model]),
                     'label' => __('Edit'),
                 ];
             })
@@ -51,19 +51,19 @@ class ProductGalleryController extends Controller
                     <button type="submit" class="btn btn-danger w-100">@lang("Delete")</button>
                 </form>', function ($model) use ($product) {
                 return [
-                    'action' => route('products.galleries.destroy', [
+                    'action' => route('products.images.destroy', [
                         'product' => $product,
-                        'gallery' => $model,
+                        'image' => $model,
                     ]),
                 ];
             })
             ->render();
 
         return view('galleries.index', [
-            'label' => __('Galleries'),
+            'label' => __('Images'),
             'subheader' => $product->title,
             'galleriesGridTable' => $galleriesGridTable,
-            'action' => route('products.galleries.store', [
+            'action' => route('products.images.store', [
                 'product' => $product->id,
             ]),
         ]);
@@ -89,10 +89,10 @@ class ProductGalleryController extends Controller
     {
         $file = $request->file('image');
 
-        GalleryService::store($request->validated(), $file, UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT_GALLERY, $product, Auth::id());
+        GalleryService::store($request->validated(), $file, UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT_IMAGE, $product, Auth::id());
 
         return redirect()
-            ->route('products.galleries.index', [
+            ->route('products.images.index', [
                 'product' => $product,
             ])
             ->with('success', __('The :resource was created!', [
@@ -114,17 +114,17 @@ class ProductGalleryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product, Gallery $gallery)
+    public function edit(Product $product, Gallery $image)
     {
-        $gallery = static::findQuery($product)->findOrFail($gallery->name);
+        $gallery = static::findQuery($product)->findOrFail($image->name);
 
         return view('galleries.edit', [
-            'label' => __('Galleries'),
+            'label' => __('Images'),
             'gallery' => $gallery,
             'subheader' => $product->title.' / '.$gallery->name,
-            'action' => route('products.galleries.update', [
+            'action' => route('products.images.update', [
                 'product' => $product->id,
-                'gallery' => $gallery->name,
+                'image' => $gallery->name,
             ]),
         ]);
     }
@@ -136,14 +136,14 @@ class ProductGalleryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateGalleryRequest $request, Product $product, Gallery $gallery)
+    public function update(UpdateGalleryRequest $request, Product $product, Gallery $image)
     {
-        $gallery = static::findQuery($product)->findOrFail($gallery->name);
+        $gallery = static::findQuery($product)->findOrFail($image->name);
 
         GalleryService::update($gallery, $request->validated());
 
         return redirect()
-            ->route('products.galleries.index', [
+            ->route('products.images.index', [
                 'product' => $product,
             ])
             ->with('success', __('The :resource was updated!', [
@@ -156,14 +156,14 @@ class ProductGalleryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product, Gallery $gallery)
+    public function destroy(Product $product, Gallery $image)
     {
-        $gallery = static::findQuery($product)->findOrFail($gallery->name);
+        $gallery = static::findQuery($product)->findOrFail($image->name);
 
         GalleryService::delete($gallery);
 
         return redirect()
-            ->route('products.galleries.index', [
+            ->route('products.images.index', [
                 'product' => $product,
             ])
             ->with('success', __('The file was deleted!', [
