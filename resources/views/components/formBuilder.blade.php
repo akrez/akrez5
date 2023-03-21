@@ -21,6 +21,10 @@
         $mt = 2;
     }
     
+    if (!isset($selectOptions)) {
+        $selectOptions = [];
+    }
+    
     if (!isset($size)) {
         $size = 4;
     }
@@ -69,6 +73,24 @@
                 @endif
                 <input name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
                     class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
+                @foreach ($errorsArray as $error)
+                    <div class="invalid-feedback">{{ $error }}</div>
+                @endforeach
+            </div>
+        @elseif ('select' == $type)
+            <div class="form-group">
+                @if ($label)
+                    <label class="form-label" for="{{ $id }}">{{ $label }}</label>
+                @endif
+                <select name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}"
+                    value="{{ $inputValue }}">
+                    @foreach ($selectOptions as $selectOptionValue => $selectOption)
+                        <option value="{{ $selectOptionValue }}"
+                            {{ $inputValue == $selectOptionValue ? ' selected="selected" ' : '' }}>
+                            {{ $selectOption }}
+                        </option>
+                    @endforeach
+                </select>
                 @foreach ($errorsArray as $error)
                     <div class="invalid-feedback">{{ $error }}</div>
                 @endforeach

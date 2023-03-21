@@ -9,7 +9,7 @@
         'isCreate' => false,
         'action' => route('products.galleries.update', [
             'product' => $product->id,
-            'gallery' => $gallery->id,
+            'gallery' => $gallery->name,
         ]),
     ])
 @endsection

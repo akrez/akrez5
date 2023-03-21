@@ -24,9 +24,6 @@ class StoreGalleryRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'image' => GalleryService::getValidationRules(),
-            'seq' => ['nullable', 'numeric'],
-        ];
+        return GalleryService::getValidationRules(true);
     }
 }

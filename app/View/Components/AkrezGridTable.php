@@ -12,7 +12,7 @@ class AkrezGridTable extends AkrezBaseGridTable
 
         if (null === $header) {
             $this->header('{{ $headerString }}');
-            $this->headerData(['headerString' => __('validation.attributes.' . $field)]);
+            $this->headerData(['headerString' => __('validation.attributes.'.$field)]);
         }
 
         $this->content('
@@ -31,7 +31,7 @@ class AkrezGridTable extends AkrezBaseGridTable
         return $this;
     }
 
-    public function newRawColumn($content, $data, $header = '')
+    public function newRawColumn($content, $data = [], $header = '')
     {
         $this->newColumn();
 

@@ -6,28 +6,42 @@ use App\Models\Gallery;
 use App\Support\Helper;
 use App\Support\UserActiveBlog;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class GalleryService
 {
-    const CATEGORY_PRODUCT_GALLERY = 'product_gallery';
+    public const CATEGORY_PRODUCT_GALLERY = 'product_gallery';
 
     public static function getStorageDisk(): Filesystem
     {
         $diskName = env('FILESYSTEM_DRIVER');
+
         return Storage::disk($diskName);
     }
 
-    public static function getValidationRules()
+    public static function getValidationRules($isStore)
     {
-        return [
-            'required',
-            'image',
-            'mimes:jpeg,png,jpg,gif,svg',
-            'max:2048',
+        $imageRules = [
+            'image' => [
+                'required',
+                'image',
+                'mimes:jpeg,png,jpg,gif,svg',
+                'max:2048',
+            ],
         ];
+
+        $commonRules = [
+            'seq' => ['nullable', 'numeric'],
+            'is_main' => ['nullable', 'boolean'],
+        ];
+
+        if ($isStore) {
+            return $imageRules + $commonRules;
+        } else {
+            return $commonRules;
+        }
     }
 
     public static function update(Gallery $gallery, array $attributes)
@@ -39,7 +53,7 @@ class GalleryService
     public static function delete(Gallery $gallery)
     {
         if ($gallery->delete()) {
-            $path = static::getUri($gallery->blog_name, $gallery->value);
+            $path = static::getUri($gallery->name);
             static::getStorageDisk()->delete($path);
         }
     }
@@ -63,7 +77,7 @@ class GalleryService
         $gallery->created_by = $userCreatedId;
         $gallery->created_at = Carbon::now()->format('Y-m-d H:i:s.u');
         if ($gallery->save()) {
-            $path = static::getUri($gallery->blog_name, $gallery->name);
+            $path = static::getUri($gallery->name);
             static::getStorageDisk()->put($path, $image->encode());
         }
     }
@@ -120,22 +134,22 @@ class GalleryService
 
     public static function getUrl($model)
     {
-        $url = static::getUri($model->blog_name, $model->name);
+        $url = static::getUri($model->name);
+
         return static::getStorageDisk()->url($url);
     }
 
-    public static function getUri($blogName, $name)
+    public static function getUri($name)
     {
         return implode('/', [
             'gallery',
-            $blogName,
-            $name
+            $name,
         ]);
     }
 
     public static function generateImageFileName($ext)
     {
-        return substr(uniqid(rand(), true), 0, 12) . '.' . $ext;
+        return substr(uniqid(rand(), true), 0, 12).'.'.$ext;
     }
 
     public static function getAsArray($attribute, $model = null, $modelId = null): array

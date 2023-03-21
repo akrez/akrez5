@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Services\GalleryService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateGalleryRequest extends FormRequest
@@ -23,8 +24,6 @@ class UpdateGalleryRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'seq' => ['nullable', 'numeric'],
-        ];
+        return GalleryService::getValidationRules(false);
     }
 }
