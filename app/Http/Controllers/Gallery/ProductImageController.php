@@ -60,7 +60,7 @@ class ProductImageController extends Controller
             ->render();
 
         return view('galleries.index', [
-            'label' => __(':resource galleries', ['resource' => __('Product')]),
+            'label' => __('Images'),
             'subheader' => $product->title,
             'galleriesGridTable' => $galleriesGridTable,
             'action' => route('products.images.store', [
@@ -119,7 +119,7 @@ class ProductImageController extends Controller
         $gallery = static::findQuery($product)->findOrFail($image->name);
 
         return view('galleries.edit', [
-            'label' => __(':resource galleries', ['resource' => __('Product')]),
+            'label' => __('Images'),
             'gallery' => $gallery,
             'subheader' => $product->title.' / '.$gallery->name,
             'action' => route('products.images.update', [
