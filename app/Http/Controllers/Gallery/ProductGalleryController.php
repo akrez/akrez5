@@ -59,10 +59,13 @@ class ProductGalleryController extends Controller
             })
             ->render();
 
-        return view('galleries.products.index', [
-            'product' => $product,
-            'galleries' => $galleries,
+        return view('galleries.index', [
+            'label' => __('Galleries'),
+            'subheader' => $product->title,
             'galleriesGridTable' => $galleriesGridTable,
+            'action' => route('products.galleries.store', [
+                'product' => $product->id,
+            ]),
         ]);
     }
 
@@ -115,9 +118,14 @@ class ProductGalleryController extends Controller
     {
         $gallery = static::findQuery($product)->findOrFail($gallery->name);
 
-        return view('galleries.products.edit', [
-            'product' => $product,
+        return view('galleries.edit', [
+            'label' => __('Galleries'),
             'gallery' => $gallery,
+            'subheader' => $product->title.' / '.$gallery->name,
+            'action' => route('products.galleries.update', [
+                'product' => $product->id,
+                'gallery' => $gallery->name,
+            ]),
         ]);
     }
 
