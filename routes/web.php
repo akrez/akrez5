@@ -1,17 +1,18 @@
 <?php
 
-use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SiteController;
-use App\Http\Middleware\CheckUserActiveBlog;
-use App\Http\Middleware\SetUserActiveBlog;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Gallery\BlogLogoController;
 use App\Http\Controllers\Gallery\ProductGalleryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Property\ProductPropertyController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Tag\BlogKeywordController;
 use App\Http\Controllers\Tag\ProductTagController;
+use App\Http\Middleware\CheckUserActiveBlog;
+use App\Http\Middleware\SetUserActiveBlog;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,17 +33,10 @@ Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function 
     Route::group(['middleware' => [CheckUserActiveBlog::class]], function () {
         Route::resource('products', ProductController::class);
         Route::put('products/{product}/active', [ProductController::class, 'active'])->name('products.active');
-        Route::resource('blogs/{blog}/keywords', BlogKeywordController::class, [
-            'as' => 'blogs',
-        ]);
-        Route::resource('products/{product}/tags', ProductTagController::class, [
-            'as' => 'products',
-        ]);
-        Route::resource('products/{product}/properties', ProductPropertyController::class, [
-            'as' => 'products',
-        ]);
-        Route::resource('products/{product}/galleries', ProductGalleryController::class, [
-            'as' => 'products',
-        ]);
+        Route::resource('blogs/{blog}/keywords', BlogKeywordController::class, ['as' => 'blogs']);
+        Route::resource('blogs/{blog}/logos', BlogLogoController::class, ['as' => 'blogs']);
+        Route::resource('products/{product}/tags', ProductTagController::class, ['as' => 'products']);
+        Route::resource('products/{product}/properties', ProductPropertyController::class, ['as' => 'products']);
+        Route::resource('products/{product}/galleries', ProductGalleryController::class, ['as' => 'products']);
     });
 });

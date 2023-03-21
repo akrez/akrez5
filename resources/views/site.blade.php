@@ -9,7 +9,12 @@
     <link href="favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
     <link rel="shortcut icon" href="{{ asset('favicon.svg') }}">
     <title>@yield('title', config('app.name'))</title>
-
+    <style>
+        .max-width-32-px {
+            max-width: 32px;
+            max-height: 32px;
+        }
+    </style>
     <link rel="stylesheet" href="{{ asset('dist/css/app.css') }}">
 
     @yield('POS_HEAD')
@@ -92,6 +97,10 @@
                                 <li>
                                     <a class="dropdown-item"
                                         href="{{ route('blogs.keywords.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Keywords')</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('blogs.logos.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Logos')</a>
                                 </li>
                             </ul>
                         </li>
