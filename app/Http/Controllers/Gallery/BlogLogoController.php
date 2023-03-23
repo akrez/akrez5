@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Gallery;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreGalleryRequest;
 use App\Http\Requests\UpdateGalleryRequest;
+use App\Models\Blog;
 use App\Models\Gallery;
 use App\Services\GalleryService;
 use App\Support\UserActiveBlog;
 use App\View\Components\AkrezGridTable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\View\View;
 
 class BlogLogoController extends Controller
 {
@@ -24,7 +26,7 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): \Illuminate\Contracts\View\View
+    public function index(Blog $blog): View
     {
         $blog = UserActiveBlog::get();
 
@@ -77,7 +79,7 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreGalleryRequest $request)
+    public function create(StoreGalleryRequest $request, Blog $blog)
     {
     }
 
@@ -88,7 +90,7 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreGalleryRequest $request)
+    public function store(StoreGalleryRequest $request, Blog $blog)
     {
         $blog = UserActiveBlog::get();
 
@@ -110,7 +112,7 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Blog $blog, Gallery $logo)
     {
     }
 
@@ -119,11 +121,11 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($blogName, $galleryName)
+    public function edit(Blog $blog, Gallery $logo)
     {
         $blog = UserActiveBlog::get();
 
-        $gallery = static::findQuery($blog)->findOrFail($galleryName);
+        $gallery = static::findQuery($blog)->findOrFail($logo->name);
 
         return view('galleries.edit', [
             'label' => __('Logos'),
@@ -143,11 +145,11 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateGalleryRequest $request, $blogName, $galleryName)
+    public function update(UpdateGalleryRequest $request, Blog $blog, Gallery $logo)
     {
         $blog = UserActiveBlog::get();
 
-        $gallery = static::findQuery($blog)->findOrFail($galleryName);
+        $gallery = static::findQuery($blog)->findOrFail($logo->name);
 
         GalleryService::update($gallery, $request->validated());
 
@@ -165,11 +167,11 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($blogName, $galleryName)
+    public function destroy(Blog $blog, Gallery $logo)
     {
         $blog = UserActiveBlog::get();
 
-        $gallery = static::findQuery($blog)->findOrFail($galleryName);
+        $gallery = static::findQuery($blog)->findOrFail($logo->name);
 
         GalleryService::delete($gallery);
 
