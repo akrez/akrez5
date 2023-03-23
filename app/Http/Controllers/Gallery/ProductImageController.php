@@ -17,8 +17,7 @@ class ProductImageController extends Controller
     protected function findQuery(Product $product): \Illuminate\Database\Eloquent\Builder
     {
         return Gallery::filterModel(UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT_IMAGE, $product)
-            ->orderBy('seq', 'desc')
-            ->orderBy('created_at', 'asc');
+            ->orderDefault();
     }
 
     /**
@@ -38,7 +37,7 @@ class ProductImageController extends Controller
             })
             ->newFieldColumn('name')
             ->newFieldColumn('seq')
-            ->newRawColumn('{{ $model->is_main ? __("Yes") : __("No") }}', [], __('validation.attributes.is_main'))
+            ->newFieldColumn('selected_at')
             ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>', function ($model) use ($product) {
                 return [
                     'href' => route('products.images.edit', ['product' => $product, 'image' => $model]),

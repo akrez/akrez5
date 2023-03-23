@@ -4,9 +4,7 @@ namespace App\Services;
 
 use App\Models\Gallery;
 use App\Support\Helper;
-use App\Support\UserActiveBlog;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
@@ -35,7 +33,7 @@ class GalleryService
 
         $commonRules = [
             'seq' => ['nullable', 'numeric'],
-            'is_main' => ['nullable', 'boolean'],
+            'is_selected' => ['nullable', 'boolean'],
         ];
 
         if ($isStore) {
@@ -49,6 +47,9 @@ class GalleryService
     {
         $gallery->fill($attributes);
         $gallery->update();
+
+        static::setSelected($gallery, $attributes['is_selected']);
+        static::resetSelected($gallery);
     }
 
     public static function delete(Gallery $gallery)
@@ -56,6 +57,7 @@ class GalleryService
         if ($gallery->delete()) {
             $path = static::getUri($gallery->name);
             static::getStorageDisk()->delete($path);
+            static::resetSelected($gallery);
         }
     }
 
@@ -76,10 +78,12 @@ class GalleryService
         $gallery->name = $name;
         $gallery->ext = $ext;
         $gallery->created_by = $userCreatedId;
-        $gallery->created_at = Carbon::now()->format('Y-m-d H:i:s.u');
+        $gallery->created_at = Helper::getNowCarbonDate();
         if ($gallery->save()) {
             $path = static::getUri($gallery->name);
             static::getStorageDisk()->put($path, $image->encode());
+            static::setSelected($gallery, $attributes['is_selected']);
+            static::resetSelected($gallery);
         }
     }
 
@@ -153,11 +157,25 @@ class GalleryService
         return substr(uniqid(rand(), true), 0, 12).'.'.$ext;
     }
 
-    public static function getAsArray($attribute, $model = null, $modelId = null): array
+    public static function resetSelected(Gallery $gallery)
     {
-        return Gallery::select($attribute)
-            ->filterModel(UserActiveBlog::name(), $model, $modelId)
-            ->pluck($attribute)
-            ->all();
+        $galleries = Gallery::filterGallery($gallery)
+            ->orderDefault()
+            ->get();
+
+        $selectedGallery = $galleries->first();
+
+        foreach ($galleries as $gallery) {
+            $isSelected = ($selectedGallery and $gallery->name == $selectedGallery->name);
+            static::setSelected($gallery, $isSelected);
+        }
+    }
+
+    private static function setSelected(Gallery $gallery, $isSelected)
+    {
+        if (boolval($isSelected) != boolval($gallery->selected_at)) {
+            $gallery->selected_at = ($isSelected ? Helper::getNowCarbonDate() : null);
+            $gallery->save();
+        }
     }
 }

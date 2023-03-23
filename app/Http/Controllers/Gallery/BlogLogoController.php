@@ -16,8 +16,7 @@ class BlogLogoController extends Controller
     protected function findQuery($model): \Illuminate\Database\Eloquent\Builder
     {
         return Gallery::filterModel(UserActiveBlog::name(), GalleryService::CATEGORY_BLOG_LOGO, $model)
-            ->orderBy('seq', 'desc')
-            ->orderBy('created_at', 'asc');
+            ->orderDefault();
     }
 
     /**
@@ -39,7 +38,7 @@ class BlogLogoController extends Controller
             })
             ->newFieldColumn('name')
             ->newFieldColumn('seq')
-            ->newRawColumn('{{ $model->is_main ? __("Yes") : __("No") }}', [], __('validation.attributes.is_main'))
+            ->newFieldColumn('selected_at')
             ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>', function ($model) use ($blog) {
                 return [
                     'label' => __('Edit'),

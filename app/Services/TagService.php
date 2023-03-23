@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Tag;
 use App\Support\Helper;
-use Illuminate\Support\Carbon;
 
 class TagService
 {
@@ -40,7 +39,7 @@ class TagService
     {
         Tag::filterModel($blogName, $category, $model)->delete();
 
-        $createdAt = Carbon::now()->format('Y-m-d H:i:s.u');
+        $createdAt = Helper::getNowCarbonDate();
 
         $insertData = [];
         foreach ($values as $value) {

@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Property;
 use App\Support\Helper;
-use Illuminate\Support\Carbon;
 
 class PropertyService
 {
@@ -88,7 +87,7 @@ class PropertyService
     {
         Property::filterModel($blogName, $category, $model)->delete();
 
-        $createdAt = Carbon::now()->format('Y-m-d H:i:s.u');
+        $createdAt = Helper::getNowCarbonDate();
 
         $insertData = [];
         foreach ($keysValues as $keyValues) {
