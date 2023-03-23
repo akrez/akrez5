@@ -102,6 +102,10 @@
                                     <a class="dropdown-item"
                                         href="{{ route('blogs.logos.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Logos')</a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('blogs.heroes.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Heroes')</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item">

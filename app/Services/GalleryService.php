@@ -12,6 +12,7 @@ class GalleryService
 {
     public const CATEGORY_PRODUCT_IMAGE = 'product_image';
     public const CATEGORY_BLOG_LOGO = 'blog_logo';
+    public const CATEGORY_BLOG_HERO = 'blog_hero';
 
     public static function getStorageDisk(): Filesystem
     {
