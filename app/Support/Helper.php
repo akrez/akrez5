@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use Illuminate\Support\Carbon;
 class Helper
 {
     public static function iexplode($delimiters, $string, $limit = PHP_INT_MAX)
@@ -62,5 +63,10 @@ class Helper
         if (null !== $model and isset($model->id)) {
             return $model->id;
         }
+    }
+
+    public static function getNowCarbonDate()
+    {
+        return Carbon::now()->format('Y-m-d H:i:s.u');
     }
 }

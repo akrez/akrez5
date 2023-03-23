@@ -21,7 +21,7 @@ class CreateGalleriesTable extends Migration
             $table->string('category')->nullable();
             $table->string('ext', 8);
             $table->decimal('seq')->nullable();
-            $table->boolean('is_main')->nullable();
+            $table->timestamp('selected_at', 0)->nullable();
             $table->integer('created_by')->nullable();
             $table->timestamp('created_at', 0)->nullable();
             $table->softDeletes();

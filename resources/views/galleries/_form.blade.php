@@ -18,10 +18,10 @@
     ])
     @include('components/formBuilder', [
         'type' => 'select',
-        'name' => 'is_main',
-        'label' => __('validation.attributes.is_main'),
-        'errorsArray' => $errors->get('is_main'),
-        'value' => isset($gallery) ? $gallery->is_main : '',
+        'name' => 'is_selected',
+        'label' => __('validation.attributes.is_selected'),
+        'errorsArray' => $errors->get('is_selected'),
+        'value' => isset($gallery) ? $gallery->is_selected : '',
         'selectOptions' => [
             '' => __('No'),
             '1' => __('Yes'),
