@@ -12,7 +12,7 @@ class AkrezGridTable extends AkrezBaseGridTable
 
         if (null === $header) {
             $this->header('{{ $headerString }}');
-            $this->headerData(['headerString' => __('validation.attributes.'.$field)]);
+            $this->headerData(['headerString' => __('validation.attributes.' . $field)]);
         }
 
         $this->content('
@@ -51,7 +51,7 @@ class AkrezGridTable extends AkrezBaseGridTable
         $this->header('{{ $headerString }}');
         $this->headerData(['headerString' => $header]);
 
-        $this->content('<{{ $tag }} {{ $attributes }}>{{ $content }}</{{ $tag }}>');
+        $this->content('<{{ $tag }} {{ $attributes }}>' . $content . '</{{ $tag }}>');
         if ($attributes instanceof \Closure) {
             $this->contentData(function ($model, $data, $grid) use ($tag, $content, $attributes) {
                 return [

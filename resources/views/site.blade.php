@@ -99,6 +99,9 @@
                                         href="{{ route('blogs.keywords.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Keywords')</a>
                                 </li>
                                 <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
                                     <a class="dropdown-item"
                                         href="{{ route('blogs.logos.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Logos')</a>
                                 </li>
@@ -107,6 +110,11 @@
                                         href="{{ route('blogs.heroes.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Heroes')</a>
                                 </li>
                             </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('contacts.index') }}" class="nav-link">
+                                @lang('Contacts')
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('products.index') }}" class="nav-link">

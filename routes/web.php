@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Gallery\BlogHeroController;
 use App\Http\Controllers\Gallery\BlogLogoController;
 use App\Http\Controllers\Gallery\ProductImageController;
@@ -32,6 +33,7 @@ Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function 
     Route::resource('blogs', BlogController::class);
     Route::patch('blogs/{blog}/active', [BlogController::class, 'active'])->name('blogs.active');
     Route::group(['middleware' => [CheckUserActiveBlog::class]], function () {
+        Route::resource('contacts', ContactController::class);
         Route::resource('products', ProductController::class);
         Route::put('products/{product}/active', [ProductController::class, 'active'])->name('products.active');
         Route::resource('blogs/{blog}/keywords', BlogKeywordController::class, ['as' => 'blogs']);

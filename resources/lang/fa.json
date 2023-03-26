@@ -754,7 +754,15 @@
     "Upload :resource": "آپلود :resource",
     "Keywords": "کلمات کلیدی",
     "Categories": "دسته‌بندی‌ها",
+    "Contacts": "راه‌های ارتباطی",
+    "Contact": "راه ارتباطی",
     "Logos": "لوگوها",
     "Heroes": "عکس‌های اصلی",
-    "Images": "تصاویر"
+    "Images": "تصاویر",
+    "status_active": "فعال",
+    "status_deactive": "غیرفعال",
+    "Telegram": "تلگرام",
+    "Whatsup": "واتس‌آپ",
+    "Phone": "تلفن",
+    "Instagram": "اینستاگرام"
 }
