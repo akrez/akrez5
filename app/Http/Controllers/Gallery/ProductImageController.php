@@ -30,7 +30,7 @@ class ProductImageController extends Controller
         $galleries = static::findQuery($product)->get();
 
         $galleriesGridTable = AkrezGridTable::build($galleries)
-            ->newRawColumn('<img src="{{ $src }}" class="img-fluid max-width-32-px">', function ($model) {
+            ->newRawColumn('<a href="{{ $src }}" target="_blank"><img src="{{ $src }}" class="img-fluid max-width-32-px"></a>', function ($model) {
                 return [
                     'src' => GalleryService::getUrl($model),
                 ];
@@ -120,7 +120,7 @@ class ProductImageController extends Controller
         return view('galleries.edit', [
             'label' => __('Images'),
             'gallery' => $gallery,
-            'subheader' => $product->title.' / '.$gallery->name,
+            'subheader' => $product->title . ' / ' . $gallery->name,
             'action' => route('products.images.update', [
                 'product' => $product->id,
                 'image' => $gallery->name,
