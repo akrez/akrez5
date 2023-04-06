@@ -36,9 +36,9 @@ Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function 
         Route::resource('contacts', ContactController::class);
         Route::resource('products', ProductController::class);
         Route::put('products/{product}/active', [ProductController::class, 'active'])->name('products.active');
-        Route::resource('blogs/{blog}/keywords', BlogKeywordController::class, ['as' => 'blogs']);
-        Route::resource('blogs/{blog}/logos', BlogLogoController::class, ['as' => 'blogs']);
-        Route::resource('blogs/{blog}/heroes', BlogHeroController::class, ['as' => 'blogs']);
+        Route::resource('keywords', BlogKeywordController::class);
+        Route::resource('logos', BlogLogoController::class);
+        Route::resource('heroes', BlogHeroController::class);
         Route::resource('products/{product}/categories', ProductCategoryController::class, ['as' => 'products']);
         Route::resource('products/{product}/properties', ProductPropertyController::class, ['as' => 'products']);
         Route::resource('products/{product}/images', ProductImageController::class, ['as' => 'products']);

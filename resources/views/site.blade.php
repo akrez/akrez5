@@ -96,18 +96,18 @@
                                 </li>
                                 <li>
                                     <a class="dropdown-item"
-                                        href="{{ route('blogs.keywords.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Keywords')</a>
+                                        href="{{ route('keywords.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Keywords')</a>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
                                     <a class="dropdown-item"
-                                        href="{{ route('blogs.logos.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Logos')</a>
+                                        href="{{ route('logos.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Logos')</a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item"
-                                        href="{{ route('blogs.heroes.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Heroes')</a>
+                                        href="{{ route('heroes.index', ['blog' => UserActiveBlog::get()]) }}">@lang('Heroes')</a>
                                 </li>
                             </ul>
                         </li>

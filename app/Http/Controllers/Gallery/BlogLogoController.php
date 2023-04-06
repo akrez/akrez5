@@ -26,7 +26,7 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Blog $blog): View
+    public function index(): View
     {
         $blog = UserActiveBlog::get();
 
@@ -44,7 +44,7 @@ class BlogLogoController extends Controller
             ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>', function ($model) use ($blog) {
                 return [
                     'label' => __('Edit'),
-                    'href' => route('blogs.logos.edit', [
+                    'href' => route('logos.edit', [
                         'blog' => $blog,
                         'logo' => $model,
                     ]),
@@ -56,7 +56,7 @@ class BlogLogoController extends Controller
                     <button type="submit" class="btn btn-danger w-100">@lang("Delete")</button>
                 </form>', function ($model) use ($blog) {
                 return [
-                    'action' => route('blogs.logos.destroy', [
+                    'action' => route('logos.destroy', [
                         'blog' => $blog,
                         'logo' => $model,
                     ]),
@@ -68,7 +68,7 @@ class BlogLogoController extends Controller
             'label' => __('Logos'),
             'subheader' => $blog->title,
             'galleriesGridTable' => $galleriesGridTable,
-            'action' => route('blogs.logos.store', [
+            'action' => route('logos.store', [
                 'blog' => $blog,
             ]),
         ]);
@@ -79,7 +79,7 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreGalleryRequest $request, Blog $blog)
+    public function create(StoreGalleryRequest $request)
     {
     }
 
@@ -90,7 +90,7 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreGalleryRequest $request, Blog $blog)
+    public function store(StoreGalleryRequest $request)
     {
         $blog = UserActiveBlog::get();
 
@@ -99,7 +99,7 @@ class BlogLogoController extends Controller
         GalleryService::store($request->validated(), $file, UserActiveBlog::name(), GalleryService::CATEGORY_BLOG_LOGO, $blog, Auth::id());
 
         return redirect()
-            ->route('blogs.logos.index', [
+            ->route('logos.index', [
                 'blog' => $blog,
             ])
             ->with('success', __('The :resource was created!', [
@@ -112,7 +112,7 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Blog $blog, Gallery $logo)
+    public function show(Gallery $logo)
     {
     }
 
@@ -121,7 +121,7 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Blog $blog, Gallery $logo)
+    public function edit(Gallery $logo)
     {
         $blog = UserActiveBlog::get();
 
@@ -130,8 +130,8 @@ class BlogLogoController extends Controller
         return view('galleries.edit', [
             'label' => __('Logos'),
             'gallery' => $gallery,
-            'subheader' => $blog->title.' / '.$gallery->name,
-            'action' => route('blogs.logos.update', [
+            'subheader' => $blog->title . ' / ' . $gallery->name,
+            'action' => route('logos.update', [
                 'blog' => $blog,
                 'logo' => $gallery,
             ]),
@@ -145,7 +145,7 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateGalleryRequest $request, Blog $blog, Gallery $logo)
+    public function update(UpdateGalleryRequest $request, Gallery $logo)
     {
         $blog = UserActiveBlog::get();
 
@@ -154,7 +154,7 @@ class BlogLogoController extends Controller
         GalleryService::update($gallery, $request->validated());
 
         return redirect()
-            ->route('blogs.logos.index', [
+            ->route('logos.index', [
                 'blog' => $blog,
             ])
             ->with('success', __('The :resource was updated!', [
@@ -167,7 +167,7 @@ class BlogLogoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Blog $blog, Gallery $logo)
+    public function destroy(Gallery $logo)
     {
         $blog = UserActiveBlog::get();
 
@@ -176,7 +176,7 @@ class BlogLogoController extends Controller
         GalleryService::delete($gallery);
 
         return redirect()
-            ->route('blogs.logos.index', [
+            ->route('logos.index', [
                 'blog' => $blog,
             ])
             ->with('success', __('The file was deleted!', [

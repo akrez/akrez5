@@ -23,7 +23,7 @@ class BlogKeywordController extends Controller
             'label' => __('Keywords'),
             'subheader' => $model->title,
             'content' => TagService::getAsText(UserActiveBlog::name(), TagService::CATEGORY_BLOG_KEYWORD, $model),
-            'action' => route('blogs.keywords.store', ['blog' => $model]),
+            'action' => route('keywords.store', ['blog' => $model]),
         ]);
     }
 
