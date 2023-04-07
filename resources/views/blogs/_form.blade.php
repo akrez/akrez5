@@ -17,7 +17,7 @@
         ])
         @include('components/formBuilder', [
             'name' => 'slug',
-            'value' => isset($blog) ? $blog->title : '',
+            'value' => isset($blog) ? $blog->slug : '',
         ])
         @include('components/formBuilder', [
             'type' => 'textarea',
