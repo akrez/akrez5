@@ -14,11 +14,10 @@
                 <div class="card">
                     <div class="card-body">
                         <h5>
-                            {{ $blog->title }}
+                            <span class="{{ $blog->blog_status == App\Enums\BlogStatus::ACTIVE ? 'text-success' : 'text-danger' }}">{{ $blog->title }}</span>
                             <small class="text-muted">{{ $blog->slug }}</small>
                         </h5>
                         <p class="card-text text-justify">{{ $blog->description }}</p>
-
                         <div class="row gy-1">
                             <div class="col-md-6">
                                 <a href="{{ route('blogs.edit', ['blog' => $blog->name]) }}"

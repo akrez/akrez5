@@ -25,6 +25,13 @@
             'value' => isset($blog) ? $blog->description : '',
         ])
         @include('components/formBuilder', [
+            'name' => 'blog_status',
+            'label' => __('validation.attributes.status'),
+            'type' => 'select',
+            'value' => isset($blog) ? $blog->blog_status : '',
+            'selectOptions' => App\Enums\BlogStatus::getItems(),
+        ])
+        @include('components/formBuilder', [
             'type' => 'submit',
             'name' => 'submit',
             'value' => isset($blog) ? __('Edit') : __('Create'),

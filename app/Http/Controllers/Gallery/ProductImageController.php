@@ -14,7 +14,13 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductImageController extends Controller
 {
-    protected function findQuery(Product $product): \Illuminate\Database\Eloquent\Builder
+    protected function findOrFailProduct($productId): Product
+    {
+        return Product::filterBlogName(UserActiveBlog::name())
+            ->findOrFail($productId);
+    }
+
+    protected function findQuery($product): \Illuminate\Database\Eloquent\Builder
     {
         return Gallery::filterModel(UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT_IMAGE, $product)
             ->orderDefault();
@@ -25,8 +31,10 @@ class ProductImageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Product $product): \Illuminate\Contracts\View\View
+    public function index($productId): \Illuminate\Contracts\View\View
     {
+        $product = $this->findOrFailProduct($productId);
+
         $galleries = static::findQuery($product)->get();
 
         $galleriesGridTable = AkrezGridTable::build($galleries)
@@ -73,7 +81,7 @@ class ProductImageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreGalleryRequest $request, Product $product)
+    public function create(StoreGalleryRequest $request, $productId)
     {
     }
 
@@ -84,8 +92,10 @@ class ProductImageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreGalleryRequest $request, Product $product)
+    public function store(StoreGalleryRequest $request, $productId)
     {
+        $product = $this->findOrFailProduct($productId);
+
         $file = $request->file('image');
 
         GalleryService::store($request->validated(), $file, UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT_IMAGE, $product, Auth::id());
@@ -104,7 +114,7 @@ class ProductImageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($productId)
     {
     }
 
@@ -113,8 +123,10 @@ class ProductImageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product, Gallery $image)
+    public function edit($productId, Gallery $image)
     {
+        $product = $this->findOrFailProduct($productId);
+
         $gallery = static::findQuery($product)->findOrFail($image->name);
 
         return view('galleries.edit', [
@@ -135,8 +147,10 @@ class ProductImageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateGalleryRequest $request, Product $product, Gallery $image)
+    public function update(UpdateGalleryRequest $request, $productId, Gallery $image)
     {
+        $product = $this->findOrFailProduct($productId);
+
         $gallery = static::findQuery($product)->findOrFail($image->name);
 
         GalleryService::update($gallery, $request->validated());
@@ -155,8 +169,10 @@ class ProductImageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product, Gallery $image)
+    public function destroy($productId, Gallery $image)
     {
+        $product = $this->findOrFailProduct($productId);
+
         $gallery = static::findQuery($product)->findOrFail($image->name);
 
         GalleryService::delete($gallery);

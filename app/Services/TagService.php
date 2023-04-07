@@ -22,17 +22,26 @@ class TagService
         return $result;
     }
 
-    public static function getAsArray($blogName, $category, $model): array
+    public static function getAsText($blogName, $category, $model): string
     {
-        return Tag::select('value')
+        $tags = Tag::select('value')
             ->filterModel($blogName, $category, $model)
             ->pluck('value')
             ->all();
+
+        return implode(TagService::GLUE, $tags);
     }
 
-    public static function getAsText($blogName, $category, $model): string
+    public static function getForApiAsModelArray($blogName, $category): array
     {
-        return implode(static::GLUE, static::getAsArray($blogName, $category, $model));
+        $tags = Tag::filterCategory($blogName, $category)
+            ->get();
+
+        $result = [];
+        foreach ($tags as $tag) {
+            $result[$tag->model_id][] = $tag->value;
+        }
+        return $result;
     }
 
     public static function store(array $values, $blogName, $category, $model, $userCreatedId)

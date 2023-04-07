@@ -32,7 +32,7 @@ class ContactController extends Controller
             ->newTagColumn('a', '{{ $model->link }}', function ($model) {
                 return ['href' => $model->link,];
             }, __('validation.attributes.link'))
-            ->newRawColumn('{{ App\Enums\ContactStatus::getValue($model->contact_status) }}', [], __('validation.attributes.contact_status'))
+            ->newRawColumn('{{ App\Enums\ContactStatus::getValue($model->contact_status) }}', [], __('validation.attributes.status'))
             ->newFieldColumn('seq')
             ->newTagColumn('a', '@lang("Edit")', function ($model) {
                 return [

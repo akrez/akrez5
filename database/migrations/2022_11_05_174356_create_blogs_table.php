@@ -18,8 +18,7 @@ class CreateBlogsTable extends Migration
             $table->string('title', 60);
             $table->string('slug', 160);
             $table->string('description', 160);
-            $table->string('language', 8)->nullable();
-            $table->string('logo', 16)->nullable();
+            $table->unsignedTinyInteger('blog_status')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
         });

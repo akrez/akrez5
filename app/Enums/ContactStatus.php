@@ -2,18 +2,6 @@
 
 namespace App\Enums;
 
-use App\Support\Enum;
-
-class ContactStatus extends Enum
+class ContactStatus extends StatusActiveDeactive
 {
-    public const DEACTIVE = Status::DEACTIVE;
-    public const ACTIVE = Status::ACTIVE;
-
-    public static function getItems()
-    {
-        return Status::getStatusItems([
-            Status::DEACTIVE,
-            Status::ACTIVE,
-        ]);
-    }
 }

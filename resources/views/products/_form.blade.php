@@ -15,6 +15,13 @@
             'value' => isset($product) ? $product->code : '',
         ])
         @include('components/formBuilder', [
+            'name' => 'product_status',
+            'label' => __('validation.attributes.status'),
+            'type' => 'select',
+            'value' => isset($product) ? $product->product_status : '',
+            'selectOptions' => App\Enums\ProductStatus::getItems(),
+        ])
+        @include('components/formBuilder', [
             'type' => 'submit',
             'name' => 'submit',
             'value' => isset($product) ? __('Edit') : __('Create'),

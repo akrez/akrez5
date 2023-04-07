@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\ProductStatus;
 use App\Models\Blog;
 use App\Models\Product;
 use App\Models\User;
@@ -24,6 +25,7 @@ class ProductSeeder extends Seeder
             'code' => '3030',
             'blog_name' => $blog->name,
             'created_by' => $user->id,
+            'product_status' => ProductStatus::ACTIVE,
         ]);
     }
 }

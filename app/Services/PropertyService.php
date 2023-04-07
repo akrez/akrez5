@@ -52,34 +52,32 @@ class PropertyService
         return $result;
     }
 
-    public static function getAsArray($blogName, $category, $model): array
+    public static function getForApiAsModelArray($blogName, $category): array
     {
-        $properties = Property::filterModel($blogName, $category, $model)->get();
-        //
+        $properties = Property::filterCategory($blogName, $category)
+            ->get();
+
         $result = [];
         foreach ($properties as $property) {
-            $key = $property['key'];
-            if (!isset($result[$key])) {
-                $result[$key] = [
-                    'key' => $key,
-                    'values' => [],
-                ];
-            }
-            $result[$key]['values'][] = $property['value'];
+            $result[$property->model_id][$property->key][] = $property->value;
         }
-        //
-        return array_values($result);
+        return $result;
     }
 
     public static function getAsText($blogName, $category, $model): String
     {
-        $items = PropertyService::getAsArray($blogName, $category, $model);
-        //
-        $result = [];
-        foreach ($items as $item) {
-            $result[] = $item['key'] . PropertyService::GLUE_KEY_VALUES . implode(PropertyService::GLUE_VALUES, $item['values']);
+        $properties = Property::filterModel($blogName, $category, $model)->get();
+
+        $items = [];
+        foreach ($properties as $property) {
+            $items[$property->key][$property->value] = $property->value;
         }
-        //
+
+        $result = [];
+        foreach ($items as $key => $values) {
+            $result[] = $key . PropertyService::GLUE_KEY_VALUES . implode(PropertyService::GLUE_VALUES, $values);
+        }
+
         return implode(PropertyService::GLUE_LINES, $result);
     }
 

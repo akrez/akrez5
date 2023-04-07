@@ -30,6 +30,7 @@
         ])
         @include('components/formBuilder', [
             'name' => 'contact_status',
+            'label' => __('validation.attributes.status'),
             'type' => 'select',
             'value' => isset($contact) ? $contact->contact_status : '',
             'selectOptions' => App\Enums\ContactStatus::getItems(),

@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->boolean('is_active')->nullable();
+            $table->unsignedTinyInteger('product_status')->nullable();
             $table->string('title', 60);
             $table->string('code', 60)->nullable();
             $table->unsignedBigInteger('created_by');

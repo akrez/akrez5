@@ -23,10 +23,22 @@ class Gallery extends Model
 
     protected $fillable = ['seq'];
 
-    public function scopeFilter(Builder $query, $blogName, $category, $modelClass, $modelId)
+    public function scopeFilterBlogName(Builder $query, $blogName)
     {
         $query->where('blog_name', $blogName);
+    }
+
+    public function scopeFilterCategory(Builder $query, $blogName, $category)
+    {
+        $this->scopeFilterBlogName($query, $blogName);
+
         $query->where('category', $category);
+    }
+
+    public function scopeFilter(Builder $query, $blogName, $category, $modelClass, $modelId)
+    {
+        $this->scopeFilterCategory($query, $blogName, $category);
+
         $query->where('model_class', $modelClass);
         $query->where('model_id', $modelId);
     }

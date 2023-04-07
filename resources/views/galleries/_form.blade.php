@@ -21,7 +21,7 @@
         'name' => 'is_selected',
         'label' => __('validation.attributes.is_selected'),
         'errorsArray' => $errors->get('is_selected'),
-        'value' => isset($gallery) ? $gallery->is_selected : '',
+        'value' => isset($gallery) ? ($gallery->selected_at ? '1' : '') : '',
         'selectOptions' => [
             '' => __('No'),
             '1' => __('Yes'),

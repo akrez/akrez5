@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\BlogStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreBlogRequest extends FormRequest
 {
@@ -27,6 +29,7 @@ class StoreBlogRequest extends FormRequest
             'name' => 'required|unique:blogs,name',
             'title' => 'required',
             'slug' => 'required',
+            'blog_status' => [Rule::in(BlogStatus::getKeys())],
             'description' => 'required|max:160',
         ];
     }

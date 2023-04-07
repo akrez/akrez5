@@ -15,10 +15,22 @@ class Property extends Model
 
     public const UPDATED_AT = null;
 
-    public function scopeFilterModel(Builder $query, $blogName, $category, $model)
+    public function scopeFilterBlogName(Builder $query, $blogName)
     {
         $query->where('blog_name', $blogName);
+    }
+
+    public function scopeFilterCategory(Builder $query, $blogName, $category)
+    {
+        $this->scopeFilterBlogName($query, $blogName);
+
         $query->where('category', $category);
+    }
+
+    public function scopeFilterModel(Builder $query, $blogName, $category, $model)
+    {
+        $this->scopeFilterCategory($query, $blogName, $category);
+
         $query->where('model_class', Helper::extractModelClass($model));
         if (isset($model->id)) {
             $query->where('model_id', Helper::extractModelId($model));

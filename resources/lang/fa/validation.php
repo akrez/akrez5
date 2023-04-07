@@ -172,7 +172,7 @@ return [
         'link' => 'لینک',
         'is_active' => 'فعال است؟',
         'content' => 'محتوا',
-        'contact_status' => 'وضعیت',
+        'status' => 'وضعیت',
         'selected_at' => 'انتخاب شده در',
         'is_selected' => 'انتخاب شده است؟',
     ],

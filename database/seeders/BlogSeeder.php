@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\BlogStatus;
 use App\Models\Blog;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -21,6 +22,7 @@ class BlogSeeder extends Seeder
             'name' => 'shahabtahrir',
             'title' => 'شهاب تحریر',
             'slug' => 'نامی فراتر از زمان',
+            'blog_status' => BlogStatus::ACTIVE,
             'description' => 'اگر می‌خواهید از شر برگه‌ها و پرونده‌ها و مجلات و فرم‌های متعددی که روزانه روی میز کارتان پخش می‌شوند',
             'created_by' => $user->id,
         ]);

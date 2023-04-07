@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\ProductStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -26,6 +28,7 @@ class UpdateProductRequest extends FormRequest
         return [
             'title' => 'required|max:60',
             'code' => 'max:60',
+            'product_status' => [Rule::in(ProductStatus::getKeys())],
         ];
     }
 }

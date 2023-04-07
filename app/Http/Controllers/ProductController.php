@@ -4,15 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Models\Blog;
 use App\Models\Product;
 use App\Support\UserActiveBlog;
 use App\View\Components\AkrezGridTable;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    protected function findQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return Product::filterBlogName(UserActiveBlog::name())
+            ->orderDefault();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,10 +24,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderBy('created_at', 'desc')->paginate(50);
+        $products = $this->findQuery()->paginate(50);
         $productsGridTable = AkrezGridTable::build($products)
             ->newFieldColumn('title')
             ->newFieldColumn('code')
+            ->newRawColumn('{{ App\Enums\ProductStatus::getValue($model->product_status) }}', [], __('validation.attributes.status'))
             ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
                 return [
                     'href' => route('products.images.index', ['product' => $model,]),
@@ -91,9 +96,8 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($productId)
     {
-        //
     }
 
     /**
@@ -102,8 +106,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit($productId)
     {
+        $product = $this->findQuery()->findOrFail($productId);
         return view('products.edit', [
             'product' => $product,
         ]);
@@ -116,8 +121,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, $productId)
     {
+        $product = $this->findQuery()->findOrFail($productId);
         $product->update($request->all());
         $product->blog_name = UserActiveBlog::name();
         $product->created_by = Auth::id();
@@ -135,21 +141,7 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($productId)
     {
-        //
-    }
-
-    public function active(Product $product)
-    {
-        $product->is_active = !$product->is_active;
-
-        if ($product->save()) {
-            $httpStatus = 200;
-        } else {
-            $httpStatus = 500;
-        }
-
-        return response()->json([], $httpStatus);
     }
 }

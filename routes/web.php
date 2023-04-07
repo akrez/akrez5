@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Gallery\BlogHeroController;
@@ -35,7 +36,6 @@ Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function 
     Route::group(['middleware' => [CheckUserActiveBlog::class]], function () {
         Route::resource('contacts', ContactController::class);
         Route::resource('products', ProductController::class);
-        Route::put('products/{product}/active', [ProductController::class, 'active'])->name('products.active');
         Route::resource('keywords', BlogKeywordController::class);
         Route::resource('logos', BlogLogoController::class);
         Route::resource('heroes', BlogHeroController::class);
@@ -44,3 +44,4 @@ Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function 
         Route::resource('products/{product}/images', ProductImageController::class, ['as' => 'products']);
     });
 });
+Route::get('api/{blogName}', [ApiController::class, 'index'])->name('api');

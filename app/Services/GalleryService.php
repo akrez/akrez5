@@ -155,7 +155,7 @@ class GalleryService
 
     public static function generateImageFileName($ext)
     {
-        return substr(uniqid(rand(), true), 0, 12).'.'.$ext;
+        return substr(uniqid(rand(), true), 0, 12) . '.' . $ext;
     }
 
     public static function resetSelected(Gallery $gallery)
@@ -178,5 +178,30 @@ class GalleryService
             $gallery->selected_at = ($isSelected ? Helper::getNowCarbonDate() : null);
             $gallery->save();
         }
+    }
+
+    public static function getForApiAsArray($blogName, $category): array
+    {
+        $tags = Gallery::filterCategory($blogName, $category)
+            ->orderDefault()
+            ->get();
+
+        $result = [];
+        foreach ($tags as $tag) {
+            $result[] = $tag->name;
+        }
+        return $result;
+    }
+
+    public static function getForApiAsModelArray($blogName, $category): array
+    {
+        $tags = Gallery::filterCategory($blogName, $category)
+            ->get();
+
+        $result = [];
+        foreach ($tags as $tag) {
+            $result[$tag->model_id][] = $tag->name;
+        }
+        return $result;
     }
 }
