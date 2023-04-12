@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Property;
+namespace App\Http\Controllers\Meta;
 
+use App\Enums\MetaCategory;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePropertyRequest;
+use App\Http\Requests\StoreMetaWithoutKeyRequest;
 use App\Models\Product;
-use App\Services\PropertyService;
+use App\Services\MetaService;
 use App\Support\UserActiveBlog;
 use Illuminate\Support\Facades\Auth;
 
-class ProductPropertyController extends Controller
+class ProductCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,9 +19,11 @@ class ProductPropertyController extends Controller
      */
     public function index(Product $product): \Illuminate\Contracts\View\View
     {
-        return view('properties.products.index', [
-            'content' => PropertyService::getAsText(UserActiveBlog::name(), PropertyService::CATEGORY_PRODUCT_PROPERTY, $product),
-            'product' => $product,
+        return view('metas.index', [
+            'label' => __('Categories'),
+            'subheader' => $product->title,
+            'content' => MetaService::getAsTextWithoutKey(UserActiveBlog::name(), MetaCategory::CATEGORY_PRODUCT_CATEGORY, $product),
+            'action' => route('products.categories.store', ['product' => $product->id]),
         ]);
     }
 
@@ -29,26 +32,27 @@ class ProductPropertyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StorePropertyRequest $request, Product $product)
+    public function create(StoreMetaWithoutKeyRequest $request, Product $product)
     {
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePropertyRequest $request, Product $product)
+    public function store(StoreMetaWithoutKeyRequest $request, Product $product)
     {
-        PropertyService::store($request->contentAsArray, UserActiveBlog::name(), PropertyService::CATEGORY_PRODUCT_PROPERTY, $product, Auth::id());
+        MetaService::store($request->contentAsArray, UserActiveBlog::name(), MetaCategory::CATEGORY_PRODUCT_CATEGORY, $product, Auth::id());
+
         return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function show(Product $product)
@@ -58,7 +62,6 @@ class ProductPropertyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function edit(Product $product)
@@ -68,18 +71,17 @@ class ProductPropertyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function update(StorePropertyRequest $request, Product $product)
+    public function update(StoreMetaWithoutKeyRequest $request, Product $product)
     {
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function destroy(Product $product)

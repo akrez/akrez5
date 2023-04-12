@@ -18,8 +18,7 @@ class DatabaseSeeder extends Seeder
             BlogSeeder::class,
             UserActiveBlog::class,
             ProductSeeder::class,
-            TagSeeder::class,
-            PropertySeeder::class,
+            MetaSeeder::class,
         ]);
     }
 }

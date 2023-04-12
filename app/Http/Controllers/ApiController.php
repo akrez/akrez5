@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MetaCategory;
 use App\Models\Blog;
 use App\Models\Contact;
 use App\Models\Product;
 use App\Services\GalleryService;
-use App\Services\PropertyService;
-use App\Services\TagService;
+use App\Services\MetaService;
 
 class ApiController extends Controller
 {
@@ -24,10 +24,9 @@ class ApiController extends Controller
             ->orderDefault()
             ->get();
 
-        $productsLabels = TagService::getForApiAsModelArray($blog->name, TagService::CATEGORY_PRODUCT_CATEGORY);
-        $blogKeywords = TagService::getForApiAsArray($blog->name, TagService::CATEGORY_BLOG_KEYWORD);
-
-        $productsProperties = PropertyService::getForApiAsModelArray($blog->name, PropertyService::CATEGORY_PRODUCT_PROPERTY);
+        $productsCategories = MetaService::getApiResponse($blog->name, MetaCategory::CATEGORY_PRODUCT_CATEGORY);
+        $blogKeywords = MetaService::getApiResponse($blog->name, MetaCategory::CATEGORY_BLOG_KEYWORD);
+        $productsProperties = MetaService::getApiResponse($blog->name, MetaCategory::CATEGORY_PRODUCT_PROPERTY);
 
         $productsImages = GalleryService::getForApiAsModelArray($blog->name, GalleryService::CATEGORY_PRODUCT_IMAGE);
         $blogLogos = GalleryService::getForApiAsArray($blog->name, GalleryService::CATEGORY_BLOG_LOGO);
@@ -36,7 +35,7 @@ class ApiController extends Controller
         return response()->json([
             'blog' => $blog,
             'products' => $products,
-            'products_labels' => $productsLabels,
+            'products_categories' => $productsCategories,
             'blog_keywords' => $blogKeywords,
             'products_properties' => $productsProperties,
             'products_images' => $productsImages,

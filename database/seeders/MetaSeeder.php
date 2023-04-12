@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Enums\MetaCategory;
 use App\Models\Blog;
 use App\Models\Product;
-use App\Services\PropertyService;
-use App\Services\TagService;
-use Faker\Factory;
+use App\Services\MetaService;
 use Illuminate\Database\Seeder;
+use Faker\Factory;
 
-class PropertySeeder extends Seeder
+class MetaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -23,7 +23,20 @@ class PropertySeeder extends Seeder
 
         $faker = Factory::create();
 
-        PropertyService::store([
+        MetaService::store(
+            [
+                [
+                    'key' => null,
+                    'values' => $faker->words(7),
+                ],
+            ],
+            $blog->name,
+            MetaCategory::CATEGORY_PRODUCT_CATEGORY,
+            $product,
+            $blog->created_by
+        );
+
+        MetaService::store([
             [
                 'key' => $faker->words(1, true),
                 'values' => $faker->words(7),
@@ -36,6 +49,6 @@ class PropertySeeder extends Seeder
                 'key' => $faker->words(1, true),
                 'values' => $faker->words(7),
             ],
-        ], $blog->name, PropertyService::CATEGORY_PRODUCT_PROPERTY, $product, $blog->created_by);
+        ], $blog->name, MetaCategory::CATEGORY_PRODUCT_PROPERTY, $product, $blog->created_by);
     }
 }

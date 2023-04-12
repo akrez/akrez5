@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Tag;
+namespace App\Http\Controllers\Meta;
 
+use App\Enums\MetaCategory;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreTagRequest;
-use App\Services\TagService;
+use App\Http\Requests\StoreMetaWithoutKeyRequest;
+use App\Services\MetaService;
 use App\Support\UserActiveBlog;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,10 +20,10 @@ class BlogKeywordController extends Controller
     {
         $model = UserActiveBlog::get();
 
-        return view('tags.index', [
+        return view('metas.index', [
             'label' => __('Keywords'),
             'subheader' => $model->title,
-            'content' => TagService::getAsText(UserActiveBlog::name(), TagService::CATEGORY_BLOG_KEYWORD, $model),
+            'content' => MetaService::getAsTextWithoutKey(UserActiveBlog::name(), MetaCategory::CATEGORY_BLOG_KEYWORD, $model),
             'action' => route('keywords.store', ['blog' => $model]),
         ]);
     }
@@ -32,7 +33,7 @@ class BlogKeywordController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreTagRequest $request)
+    public function create(StoreMetaWithoutKeyRequest $request)
     {
     }
 
@@ -43,11 +44,11 @@ class BlogKeywordController extends Controller
      *
      * @return \Illuminate\Http\Replasponse
      */
-    public function store(StoreTagRequest $request)
+    public function store(StoreMetaWithoutKeyRequest $request)
     {
         $model = UserActiveBlog::get();
 
-        TagService::store($request->contentAsArray, UserActiveBlog::name(), TagService::CATEGORY_BLOG_KEYWORD, $model, Auth::id());
+        MetaService::store($request->contentAsArray, UserActiveBlog::name(), MetaCategory::CATEGORY_BLOG_KEYWORD, $model, Auth::id());
 
         return redirect()->back();
     }
@@ -77,7 +78,7 @@ class BlogKeywordController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreTagRequest $request)
+    public function update(StoreMetaWithoutKeyRequest $request)
     {
     }
 
