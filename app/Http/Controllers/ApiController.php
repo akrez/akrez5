@@ -25,7 +25,7 @@ class ApiController extends Controller
             ->get();
 
         $productsLabels = TagService::getForApiAsModelArray($blog->name, TagService::CATEGORY_PRODUCT_CATEGORY);
-        $blogKeywords = TagService::getForApiAsModelArray($blog->name, TagService::CATEGORY_BLOG_KEYWORD);
+        $blogKeywords = TagService::getForApiAsArray($blog->name, TagService::CATEGORY_BLOG_KEYWORD);
 
         $productsProperties = PropertyService::getForApiAsModelArray($blog->name, PropertyService::CATEGORY_PRODUCT_PROPERTY);
 

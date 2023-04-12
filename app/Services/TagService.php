@@ -44,6 +44,18 @@ class TagService
         return $result;
     }
 
+    public static function getForApiAsArray($blogName, $category): array
+    {
+        $tags = Tag::filterCategory($blogName, $category)
+            ->get();
+
+        $result = [];
+        foreach ($tags as $tag) {
+            $result[] = $tag->value;
+        }
+        return $result;
+    }
+
     public static function store(array $values, $blogName, $category, $model, $userCreatedId)
     {
         Tag::filterModel($blogName, $category, $model)->delete();
