@@ -30,7 +30,7 @@ class StoreBlogRequest extends FormRequest
             'title' => 'required',
             'slug' => 'required',
             'blog_status' => [Rule::in(BlogStatus::getKeys())],
-            'description' => 'required|max:160',
+            'description' => 'required|max:320',
         ];
     }
 }
