@@ -18,7 +18,7 @@ class ContactType extends Enum
         return [
             static::CONTACT_TYPE_ADDRESS => __('Address'),
             static::CONTACT_TYPE_TELEGRAM => __('Telegram'),
-            static::CONTACT_TYPE_WHATSAPP => __('Whatsapp'),
+            static::CONTACT_TYPE_WHATSAPP => __('WhatsApp'),
             static::CONTACT_TYPE_PHONE => __('Phone'),
             static::CONTACT_TYPE_EMAIL => __('Email'),
             static::CONTACT_TYPE_INSTAGRAM => __('Instagram'),
