@@ -20,7 +20,9 @@ class Contact extends Model
 
     public function scopeOrderDefault(Builder $query)
     {
-        $query->orderBy('created_at', 'DESC');
+        $query->orderBy('selected_at', 'DESC');
+        $query->orderBy('seq', 'DESC');
+        $query->orderBy('created_at', 'ASC');
     }
 
     public static function scopeFilterActive($query)
