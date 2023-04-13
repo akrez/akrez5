@@ -28,9 +28,9 @@ class ApiController extends Controller
         $blogKeywords = MetaService::getApiResponse($blog->name, MetaCategory::CATEGORY_BLOG_KEYWORD);
         $productsProperties = MetaService::getApiResponse($blog->name, MetaCategory::CATEGORY_PRODUCT_PROPERTY);
 
-        $productsImages = GalleryService::getForApiAsModelArray($blog->name, GalleryService::CATEGORY_PRODUCT_IMAGE);
-        $blogLogos = GalleryService::getForApiAsArray($blog->name, GalleryService::CATEGORY_BLOG_LOGO);
-        $blogHeros = GalleryService::getForApiAsArray($blog->name, GalleryService::CATEGORY_BLOG_HERO);
+        $productsImages = GalleryService::getApiResponse($blog->name, GalleryService::CATEGORY_PRODUCT_IMAGE);
+        $blogLogos = GalleryService::getApiResponse($blog->name, GalleryService::CATEGORY_BLOG_LOGO);
+        $blogHeros = GalleryService::getApiResponse($blog->name, GalleryService::CATEGORY_BLOG_HERO);
 
         return response()->json([
             'blog' => $blog,

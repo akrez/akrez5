@@ -180,28 +180,28 @@ class GalleryService
         }
     }
 
-    public static function getForApiAsArray($blogName, $category): array
+    public static function getApiResponse($blogName, $category, $groupByModelId = true): array
     {
-        $tags = Gallery::filterCategory($blogName, $category)
+        $galleries = Gallery::filterCategory($blogName, $category)
             ->orderDefault()
             ->get();
 
         $result = [];
-        foreach ($tags as $tag) {
-            $result[] = $tag->name;
-        }
-        return $result;
-    }
+        foreach ($galleries as $gallery) {
 
-    public static function getForApiAsModelArray($blogName, $category): array
-    {
-        $tags = Gallery::filterCategory($blogName, $category)
-            ->get();
+            $modelId = ($groupByModelId ? $gallery->model_id : null);
 
-        $result = [];
-        foreach ($tags as $tag) {
-            $result[$tag->model_id][] = $tag->name;
+            $resultUniqueKey =  $modelId;
+
+            if (!isset($result[$resultUniqueKey])) {
+                $result[$resultUniqueKey] = [
+                    'model_id' => $modelId,
+                    'names' => [],
+                ];
+            }
+            $result[$resultUniqueKey]['names'][] = $gallery->name;
         }
-        return $result;
+
+        return array_values($result);
     }
 }
