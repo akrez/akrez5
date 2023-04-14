@@ -98,23 +98,29 @@ class MetaService
         return implode(MetaService::GLUE_LINES, $result);
     }
 
-    public static function getApiResponse($blogName, $category): array
+    public static function getApiResponse($blogName, $category, $groupByModelId = false, $groupByKey = false): array
     {
         $metas = Meta::filterCategory($blogName, $category)
             ->get();
 
         $result = [];
         foreach ($metas as $meta) {
-            $resultUniqueKey = $meta->model_id . '-' . $meta->key;
+            $modelId = ($groupByModelId ? $meta->model_id : null);
+            $key = ($groupByKey ? $meta->key : null);
+
+            $resultUniqueKey = $modelId . '-' . $key;
 
             if (!isset($result[$resultUniqueKey])) {
                 $result[$resultUniqueKey] = [
-                    'key' => $meta->key,
-                    'model_id' => $meta->model_id,
+                    'key' => $key,
+                    'model_id' => $modelId,
                     'values' => [],
                 ];
             }
-            $result[$resultUniqueKey]['values'][] = $meta->value;
+
+            if (!in_array($meta->value, $result[$resultUniqueKey]['values'])) {
+                $result[$resultUniqueKey]['values'][] = $meta->value;
+            }
         }
 
         return array_values($result);

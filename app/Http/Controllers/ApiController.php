@@ -24,9 +24,10 @@ class ApiController extends Controller
             ->orderDefault()
             ->get();
 
-        $productsCategories = MetaService::getApiResponse($blog->name, MetaCategory::CATEGORY_PRODUCT_CATEGORY);
+        $blogCategories = MetaService::getApiResponse($blog->name, MetaCategory::CATEGORY_PRODUCT_CATEGORY);
+        $productsCategories = MetaService::getApiResponse($blog->name, MetaCategory::CATEGORY_PRODUCT_CATEGORY, true);
         $blogKeywords = MetaService::getApiResponse($blog->name, MetaCategory::CATEGORY_BLOG_KEYWORD);
-        $productsProperties = MetaService::getApiResponse($blog->name, MetaCategory::CATEGORY_PRODUCT_PROPERTY);
+        $productsProperties = MetaService::getApiResponse($blog->name, MetaCategory::CATEGORY_PRODUCT_PROPERTY, true, true);
 
         $productsImages = GalleryService::getApiResponse($blog->name, GalleryService::CATEGORY_PRODUCT_IMAGE);
         $blogLogos = GalleryService::getApiResponse($blog->name, GalleryService::CATEGORY_BLOG_LOGO);
@@ -34,6 +35,7 @@ class ApiController extends Controller
 
         return response()->json([
             'blog' => $blog,
+            'blog_categories' => $blogCategories,
             'products' => $products,
             'products_categories' => $productsCategories,
             'blog_keywords' => $blogKeywords,
