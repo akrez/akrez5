@@ -28,9 +28,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get(RouteServiceProvider::HOME, [SiteController::class, 'index'])->name('home');
 Auth::routes(['verify' => true]);
 Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function () {
+    Route::get(RouteServiceProvider::HOME, [SiteController::class, 'index'])->name('home');
     Route::resource('blogs', BlogController::class);
     Route::patch('blogs/{blog}/active', [BlogController::class, 'active'])->name('blogs.active');
     Route::group(['middleware' => [CheckUserActiveBlog::class]], function () {
