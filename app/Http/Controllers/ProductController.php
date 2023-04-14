@@ -46,14 +46,14 @@ class ProductController extends Controller
                     'label' => __('Edit'),
                 ];
             }, __('Images'))
-            ->newRawColumn('<pre>{{ $categories }}</pre><a class="btn btn-info text-light" href="{{ $href }}">{{ $label }}</a>',  function ($model) {
+            ->newRawColumn('@foreach (explode("\n", $categories) as $category) {{ $category }} <br> @endforeach <a class="btn btn-info text-light mt-2" href="{{ $href }}">{{ $label }}</a>',  function ($model) {
                 return [
                     'categories' => MetaService::getAsTextWithoutKey(UserActiveBlog::name(), MetaCategory::CATEGORY_PRODUCT_CATEGORY, $model),
                     'href' => route('products.categories.index', ['product' => $model,]),
                     'label' => __('Edit'),
                 ];
             }, __('Categories'))
-            ->newRawColumn('<pre>{{ $properties }}</pre><a class="btn btn-info text-light" href="{{ $href }}">{{ $label }}</a>',  function ($model) {
+            ->newRawColumn('@foreach (explode("\n", $properties) as $property) {{ $property }} <br> @endforeach <a class="btn btn-info text-light mt-2" href="{{ $href }}">{{ $label }}</a>',  function ($model) {
                 return [
                     'properties' => MetaService::getAsTextWithKey(UserActiveBlog::name(), MetaCategory::CATEGORY_PRODUCT_PROPERTY, $model),
                     'href' => route('products.properties.index', ['product' => $model,]),
