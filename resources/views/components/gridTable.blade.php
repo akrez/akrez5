@@ -11,9 +11,9 @@
         @foreach ($gridTable->models as $modelKey => $model)
             <tr>
                 @foreach ($gridTable->columns as $columnKey => $column)
-                    <th {!! $gridTable->renderContentAttributes($column, $model, $index, $modelKey, $columnKey) !!}>
+                    <td {!! $gridTable->renderContentAttributes($column, $model, $index, $modelKey, $columnKey) !!}>
                         {!! $gridTable->renderContent($column, $model, $index, $modelKey, $columnKey) !!}
-                    </th>
+                    </td>
                 @endforeach
             </tr>
             @php($index++)
