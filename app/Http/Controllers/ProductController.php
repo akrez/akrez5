@@ -79,7 +79,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $product = new Product($request->all());
+        $product = new Product($request->validated());
         $product->blog_name = UserActiveBlog::name();
         $product->created_by = Auth::id();
         $product->save();
@@ -124,7 +124,7 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, $productId)
     {
         $product = $this->findQuery()->findOrFail($productId);
-        $product->update($request->all());
+        $product->update($request->validated());
         $product->blog_name = UserActiveBlog::name();
         $product->created_by = Auth::id();
         $product->save();

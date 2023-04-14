@@ -118,7 +118,7 @@ class ContactController extends Controller
     public function update(UpdateContactRequest $request, Contact $contact)
     {
         $contact = static::findQuery()->findOrFail($contact->id);
-        $contact->update($request->all());
+        $contact->update($request->validated());
         $contact->blog_name = UserActiveBlog::name();
         $contact->created_by = Auth::id();
         $contact->save();
