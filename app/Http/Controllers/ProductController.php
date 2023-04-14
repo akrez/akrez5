@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MetaCategory;
+use App\Enums\ProductStatus;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Gallery;
 use App\Models\Product;
+use App\Services\GalleryService;
+use App\Services\MetaService;
 use App\Support\UserActiveBlog;
 use App\View\Components\AkrezGridTable;
 use Illuminate\Support\Facades\Auth;
@@ -26,33 +31,35 @@ class ProductController extends Controller
     {
         $products = $this->findQuery()->paginate(50);
         $productsGridTable = AkrezGridTable::build($products)
-            ->newFieldColumn('title')
-            ->newFieldColumn('code')
-            ->newRawColumn('{{ App\Enums\ProductStatus::getValue($model->product_status) }}', [], __('validation.attributes.status'))
-            ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
+            ->newRawColumn('{{ $model->title }}<br>{{ $model->code }}<br>{{ $productStatus }}<br><a class="btn btn-info text-light mt-2" href="{{ $href }}">{{ $label }}</a>',  function ($model) {
                 return [
-                    'href' => route('products.images.index', ['product' => $model,]),
-                    'label' => __('Images'),
-                ];
-            })
-            ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
-                return [
-                    'href' => route('products.categories.index', ['product' => $model,]),
-                    'label' => __('Categories'),
-                ];
-            })
-            ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
-                return [
-                    'href' => route('products.properties.index', ['product' => $model,]),
-                    'label' => __('Properties'),
-                ];
-            })
-            ->newRawColumn('<a class="btn btn-info text-light w-100" href="{{ $href }}"><i class="fas fa-user"></i>{{ $label }}</a>',  function ($model) {
-                return [
+                    'productStatus' => ProductStatus::getValue($model->product_status),
+                    'categories' => MetaService::getAsTextWithoutKey(UserActiveBlog::name(), MetaCategory::CATEGORY_PRODUCT_CATEGORY, $model),
                     'href' => route('products.edit', ['product' => $model,]),
                     'label' => __('Edit'),
                 ];
-            })
+            }, __('Product'))
+            ->newRawColumn('@foreach ($galleries as $galleryKey => $gallery) <img src="{{ \App\Services\GalleryService::getUrl($gallery) }}" class="img-fluid max-width-32-px"> @endforeach <br> <a class="btn btn-info text-light mt-2" href="{{ $href }}">{{ $label }}</a>',  function ($model) {
+                return [
+                    'galleries' => Gallery::filterModel(UserActiveBlog::name(), GalleryService::CATEGORY_PRODUCT_IMAGE, $model)->orderDefault()->get(),
+                    'href' => route('products.images.index', ['product' => $model,]),
+                    'label' => __('Edit'),
+                ];
+            }, __('Images'))
+            ->newRawColumn('<pre>{{ $categories }}</pre><a class="btn btn-info text-light" href="{{ $href }}">{{ $label }}</a>',  function ($model) {
+                return [
+                    'categories' => MetaService::getAsTextWithoutKey(UserActiveBlog::name(), MetaCategory::CATEGORY_PRODUCT_CATEGORY, $model),
+                    'href' => route('products.categories.index', ['product' => $model,]),
+                    'label' => __('Edit'),
+                ];
+            }, __('Categories'))
+            ->newRawColumn('<pre>{{ $properties }}</pre><a class="btn btn-info text-light" href="{{ $href }}">{{ $label }}</a>',  function ($model) {
+                return [
+                    'properties' => MetaService::getAsTextWithKey(UserActiveBlog::name(), MetaCategory::CATEGORY_PRODUCT_PROPERTY, $model),
+                    'href' => route('products.properties.index', ['product' => $model,]),
+                    'label' => __('Edit'),
+                ];
+            }, __('Properties'))
             ->render();
 
         return view('products.index', [
