@@ -27,7 +27,7 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'title' => 'required|max:60',
-            'code' => 'max:60',
+            'code' => 'required|max:60',
             'product_status' => [Rule::in(ProductStatus::getKeys())],
         ];
     }
