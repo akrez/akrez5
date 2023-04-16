@@ -26,7 +26,7 @@ class StoreBlogRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:blogs,name',
+            'name' => 'required|alpha_num|regex:/^[a-z0-9]+$/|unique:blogs,name',
             'title' => 'required',
             'slug' => 'required',
             'blog_status' => [Rule::in(BlogStatus::getKeys())],
