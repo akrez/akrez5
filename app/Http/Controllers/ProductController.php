@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\MetaCategory;
 use App\Enums\ProductStatus;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Services\ProductService;
+use Illuminate\Http\Request;
 use App\Models\Gallery;
 use App\Models\Product;
 use App\Services\GalleryService;
@@ -84,17 +84,20 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(Request $request)
     {
-        $product = new Product($request->validated());
-        $product->blog_name = UserActiveBlog::name();
-        $product->created_by = Auth::id();
-        $product->save();
-        return redirect()
-            ->route('products.index', ['blog' => UserActiveBlog::name()])
-            ->with('success', __('The :resource was created!', [
-                'resource' => $product->title,
-            ]));
+        $result = ProductService::store(UserActiveBlog::name(), Auth::id(), $request->all());
+        if ($result->status) {
+            return redirect()
+                ->route('products.index', ['blog' => UserActiveBlog::name()])
+                ->with('success', __('The :resource was created!', [
+                    'resource' => $result->model->title,
+                ]));
+        } else {
+            return back()
+                ->withErrors($result->validator)
+                ->withInput();
+        }
     }
 
     /**
@@ -128,18 +131,21 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductRequest $request, $productId)
+    public function update(Request $request, $productId)
     {
         $product = $this->findQuery()->findOrFail($productId);
-        $product->update($request->validated());
-        $product->blog_name = UserActiveBlog::name();
-        $product->created_by = Auth::id();
-        $product->save();
-        return redirect()
-            ->route('products.index', ['blog' => UserActiveBlog::name()])
-            ->with('success', __('The :resource was updated!', [
-                'resource' => $product->title,
-            ]));
+        $result = ProductService::update($product, $request->all());
+        if ($result->status) {
+            return redirect()
+                ->route('products.index', ['blog' => UserActiveBlog::name()])
+                ->with('success', __('The :resource was updated!', [
+                    'resource' => $product->title,
+                ]));
+        } else {
+            return back()
+                ->withErrors($result->validator)
+                ->withInput();
+        }
     }
 
     /**
