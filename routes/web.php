@@ -14,6 +14,7 @@ use App\Http\Controllers\Meta\ProductCategoryController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Middleware\CheckSuperAdmin;
 use App\Http\Middleware\CheckUserActiveBlog;
+use App\Http\Middleware\LogRequest;
 use App\Http\Middleware\SetUserActiveBlog;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
@@ -30,23 +31,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes(['verify' => true]);
-Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function () {
-    Route::get(RouteServiceProvider::HOME, [SiteController::class, 'index'])->name('home');
-    Route::resource('blogs', BlogController::class);
-    Route::patch('blogs/{blog}/active', [BlogController::class, 'active'])->name('blogs.active');
-    Route::group(['middleware' => [CheckUserActiveBlog::class]], function () {
-        Route::resource('contacts', ContactController::class);
-        Route::resource('products', ProductController::class);
-        Route::resource('keywords', BlogKeywordController::class);
-        Route::resource('logos', BlogLogoController::class);
-        Route::resource('heroes', BlogHeroController::class);
-        Route::resource('products/{product}/categories', ProductCategoryController::class, ['as' => 'products']);
-        Route::resource('products/{product}/properties', ProductPropertyController::class, ['as' => 'products']);
-        Route::resource('products/{product}/images', ProductImageController::class, ['as' => 'products']);
+Route::group(['middleware' => [LogRequest::class]], function () {
+    Auth::routes(['verify' => true]);
+    Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function () {
+        Route::get(RouteServiceProvider::HOME, [SiteController::class, 'index'])->name('home');
+        Route::resource('blogs', BlogController::class);
+        Route::patch('blogs/{blog}/active', [BlogController::class, 'active'])->name('blogs.active');
+        Route::group(['middleware' => [CheckUserActiveBlog::class]], function () {
+            Route::resource('contacts', ContactController::class);
+            Route::resource('products', ProductController::class);
+            Route::resource('keywords', BlogKeywordController::class);
+            Route::resource('logos', BlogLogoController::class);
+            Route::resource('heroes', BlogHeroController::class);
+            Route::resource('products/{product}/categories', ProductCategoryController::class, ['as' => 'products']);
+            Route::resource('products/{product}/properties', ProductPropertyController::class, ['as' => 'products']);
+            Route::resource('products/{product}/images', ProductImageController::class, ['as' => 'products']);
+        });
     });
-});
-Route::get('api/{blogName}', [ApiController::class, 'index'])->name('api');
-Route::group(['prefix' => 'superadmin', 'middleware' => ['verified', CheckSuperAdmin::class]], function () {
-    Route::get('migrate', [SuperAdminController::class, 'migrate']);
+    Route::get('api/{blogName}', [ApiController::class, 'index'])->name('api');
+    Route::group(['prefix' => 'superadmin', 'middleware' => ['verified', CheckSuperAdmin::class]], function () {
+        Route::get('migrate', [SuperAdminController::class, 'migrate']);
+    });
 });
