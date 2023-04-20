@@ -138,7 +138,7 @@ class ProductController extends Controller
     public function update(Request $request, $productId)
     {
         $product = $this->findQuery()->findOrFail($productId);
-        $result = ProductService::update($product, $request->all());
+        $result = ProductService::update(UserActiveBlog::name(), $product, $request->all());
         if ($result->status) {
             return redirect()
                 ->route('products.index')
