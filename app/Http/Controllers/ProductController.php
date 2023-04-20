@@ -31,7 +31,11 @@ class ProductController extends Controller
     {
         $products = $this->findQuery()->paginate(50);
         $productsGridTable = AkrezGridTable::build($products)
-            ->newRawColumn('{{ $model->title }}<br>{{ $model->code }}<br>{{ $productStatus }}<br><a class="btn btn-info text-light mt-2" href="{{ $href }}">{{ $label }}</a>',  function ($model) {
+            ->newRawColumn('<div class="h6"> {{ $model->title }} </div>
+            <div><small class="text-muted">@lang("validation.attributes.code")</small> {{ $model->code }} </div>
+            <div><small class="text-muted">@lang("validation.attributes.seq")</small> {{ $model->seq }} </div>
+            <div><small class="text-muted">@lang("validation.attributes.status")</small> {{ $productStatus }} </div>
+            <a class="btn btn-info text-light mt-2" href="{{ $href }}">{{ $label }}</a>',  function ($model) {
                 return [
                     'productStatus' => ProductStatus::getValue($model->product_status),
                     'categories' => MetaService::getAsTextWithoutKey(UserActiveBlog::name(), MetaCategory::CATEGORY_PRODUCT_CATEGORY, $model),
@@ -89,7 +93,7 @@ class ProductController extends Controller
         $result = ProductService::store(UserActiveBlog::name(), Auth::id(), $request->all());
         if ($result->status) {
             return redirect()
-                ->route('products.index', ['blog' => UserActiveBlog::name()])
+                ->route('products.index')
                 ->with('success', __('The :resource was created!', [
                     'resource' => $result->model->title,
                 ]));
@@ -137,7 +141,7 @@ class ProductController extends Controller
         $result = ProductService::update($product, $request->all());
         if ($result->status) {
             return redirect()
-                ->route('products.index', ['blog' => UserActiveBlog::name()])
+                ->route('products.index')
                 ->with('success', __('The :resource was updated!', [
                     'resource' => $product->title,
                 ]));

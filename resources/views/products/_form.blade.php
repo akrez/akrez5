@@ -15,6 +15,10 @@
             'value' => isset($product) ? $product->code : '',
         ])
         @include('components/formBuilder', [
+            'name' => 'seq',
+            'value' => isset($product) ? $product->seq : '',
+        ])
+        @include('components/formBuilder', [
             'name' => 'product_status',
             'label' => __('validation.attributes.status'),
             'type' => 'select',

@@ -11,7 +11,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'code', 'product_status',];
+    protected $fillable = ['title', 'code', 'product_status', 'seq',];
 
     public function scopeFilterBlogName(Builder $query, $blogName)
     {
@@ -20,10 +20,11 @@ class Product extends Model
 
     public function scopeOrderDefault(Builder $query)
     {
+        $query->orderBy('seq', 'DESC');
         $query->orderBy('created_at', 'DESC');
     }
 
-    public static function scopeFilterActive($query)
+    public function scopeFilterActive($query)
     {
         return $query->where('product_status', ProductStatus::ACTIVE);
     }

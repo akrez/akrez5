@@ -11,6 +11,8 @@ use App\Http\Controllers\Meta\ProductPropertyController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Meta\BlogKeywordController;
 use App\Http\Controllers\Meta\ProductCategoryController;
+use App\Http\Controllers\SuperAdminController;
+use App\Http\Middleware\CheckSuperAdmin;
 use App\Http\Middleware\CheckUserActiveBlog;
 use App\Http\Middleware\SetUserActiveBlog;
 use App\Providers\RouteServiceProvider;
@@ -45,3 +47,6 @@ Route::group(['middleware' => ['verified', SetUserActiveBlog::class]], function 
     });
 });
 Route::get('api/{blogName}', [ApiController::class, 'index'])->name('api');
+Route::group(['prefix' => 'superadmin', 'middleware' => ['verified', CheckSuperAdmin::class]], function () {
+    Route::get('migrate', [SuperAdminController::class, 'migrate']);
+});

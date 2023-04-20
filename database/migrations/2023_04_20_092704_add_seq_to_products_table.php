@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddActiveBlogToUsersTable extends Migration
+class AddSeqToProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddActiveBlogToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('active_blog', 60)->nullable();
+        Schema::table('products', function (Blueprint $table) {
+            $table->decimal('seq')->nullable()->after('code');
         });
     }
 
@@ -25,8 +25,8 @@ class AddActiveBlogToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('active_blog');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('seq');
         });
     }
 }

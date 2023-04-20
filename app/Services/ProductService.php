@@ -16,6 +16,7 @@ class ProductService
             'title' => 'required|max:60',
             'code' => 'required|max:60',
             'product_status' => [Rule::in(ProductStatus::getKeys())],
+            'seq' => ['nullable', 'numeric'],
         ];
     }
 
