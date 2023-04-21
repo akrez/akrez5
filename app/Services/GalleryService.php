@@ -148,7 +148,6 @@ class GalleryService
     public static function getUri($name)
     {
         return implode('/', [
-            'gallery',
             $name,
         ]);
     }
