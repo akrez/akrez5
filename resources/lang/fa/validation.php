@@ -174,6 +174,7 @@ return [
         'is_active' => 'فعال است؟',
         'content' => 'محتوا',
         'status' => 'وضعیت',
+        'product_status' => 'وضعیت',
         'selected_at' => 'انتخاب شده در',
         'is_selected' => 'انتخاب شده است؟',
     ],

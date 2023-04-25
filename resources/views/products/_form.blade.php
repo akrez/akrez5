@@ -20,7 +20,6 @@
         ])
         @include('components/formBuilder', [
             'name' => 'product_status',
-            'label' => __('validation.attributes.status'),
             'type' => 'select',
             'value' => isset($product) ? $product->product_status : '',
             'selectOptions' => App\Enums\ProductStatus::getItems(),

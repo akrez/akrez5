@@ -70,7 +70,7 @@ class ProductService
             __('validation.attributes.title'),
             __('validation.attributes.code'),
             __('validation.attributes.seq'),
-            __('validation.attributes.status'),
+            __('validation.attributes.product_status'),
         ];
 
         if (null === $cellsGlue) {

@@ -37,7 +37,7 @@ class ProductController extends Controller
             ->newRawColumn('<div class="h6"> {{ $model->title }} </div>
             <div><small class="text-muted">@lang("validation.attributes.code")</small> {{ $model->code }} </div>
             <div><small class="text-muted">@lang("validation.attributes.seq")</small> {{ $model->seq }} </div>
-            <div><small class="text-muted">@lang("validation.attributes.status")</small> {{ $productStatus }} </div>
+            <div><small class="text-muted">@lang("validation.attributes.product_status")</small> {{ $productStatus }} </div>
             <a class="btn btn-info text-light mt-2" href="{{ $href }}">{{ $label }}</a>',  function ($model) {
                 return [
                     'productStatus' => ProductStatus::getValue($model->product_status),
