@@ -133,7 +133,7 @@ class ProductService
             if ($result) {
                 $status = ($status and $result->status);
                 foreach ($result->validator->errors()->all() as $errorKey => $error) {
-                    $messages->add('port', $rowKey . ': ' .  $error);
+                    $messages->add('port', $rowKey + 1 . ': ' .  $error);
                 }
                 $data[] = $result;
             }
