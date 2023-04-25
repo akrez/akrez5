@@ -119,7 +119,7 @@ class ProductService
                 'title' => (mb_strlen($row[1]) ? trim($row[1]) : null),
                 'code' => (mb_strlen($row[2]) ? trim($row[2]) : null),
                 'seq' => (mb_strlen($row[3]) ? floatval($row[3]) : null),
-                'product_status' => boolval($row[4]),
+                'product_status' => (boolval($row[4]) ? 1 : null),
             ];
 
             if (empty($attributes['id'])) {
