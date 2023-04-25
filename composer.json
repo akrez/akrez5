@@ -15,7 +15,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "intervention/image": "*",
-        "league/flysystem-ftp": "*",
+        "phpoffice/phpspreadsheet": "*",
         "laravel/ui": "^3.4"
     },
     "require-dev": {

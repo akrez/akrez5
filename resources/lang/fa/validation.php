@@ -159,6 +159,7 @@ return [
     */
 
     'attributes' => [
+        'id' => 'شناسه',
         'name' => 'نام',
         'title' => 'عنوان',
         'slug' => 'شعار',

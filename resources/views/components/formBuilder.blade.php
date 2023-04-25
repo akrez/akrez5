@@ -40,7 +40,7 @@
     if (!isset($errorsArray)) {
         $errorsArray = $errors->get($name);
     }
-    
+
     if (!isset($class)) {
         $class = 'form-control';
     }
@@ -55,33 +55,17 @@
         <div class="row">
     @endif
     <div class="col-md-{{ $size }} mt-{{ $mt }}">
-        @if ('textarea' == $type)
-            <div class="form-group">
-                @if ($label)
-                    <label class="form-label" for="{{ $id }}">{{ $label }}</label>
-                @endif
+        <div class="form-group">
+            @if ($label)
+                <label class="form-label" for="{{ $id }}">{{ $label }}</label>
+            @endif
+            @if ('textarea' == $type)
                 <textarea name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}"
                     rows="{{ $textareaRows }}">{{ $inputValue }}</textarea>
-                @foreach ($errorsArray as $error)
-                    <div class="invalid-feedback">{{ $error }}</div>
-                @endforeach
-            </div>
-        @elseif ('file' == $type)
-            <div class="form-group">
-                @if ($label)
-                    <label class="form-label" for="{{ $id }}">{{ $label }}</label>
-                @endif
+            @elseif ('file' == $type)
                 <input name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
                     class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
-                @foreach ($errorsArray as $error)
-                    <div class="invalid-feedback">{{ $error }}</div>
-                @endforeach
-            </div>
-        @elseif ('select' == $type)
-            <div class="form-group">
-                @if ($label)
-                    <label class="form-label" for="{{ $id }}">{{ $label }}</label>
-                @endif
+            @elseif ('select' == $type)
                 <select name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}"
                     value="{{ $inputValue }}">
                     @foreach ($selectOptions as $selectOptionValue => $selectOption)
@@ -91,22 +75,14 @@
                         </option>
                     @endforeach
                 </select>
-                @foreach ($errorsArray as $error)
-                    <div class="invalid-feedback">{{ $error }}</div>
-                @endforeach
-            </div>
-        @else
-            <div class="form-group">
-                @if ($label)
-                    <label class="form-label" for="{{ $id }}">{{ $label }}</label>
-                @endif
+            @else
                 <input name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
                     class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
-                @foreach ($errorsArray as $error)
-                    <div class="invalid-feedback">{{ $error }}</div>
-                @endforeach
-            </div>
-        @endif
+            @endif
+            @foreach ($errorsArray as $error)
+                <div class="invalid-feedback">{{ $error }}</div>
+            @endforeach
+        </div>
     </div>
     @if ($row)
         </div>

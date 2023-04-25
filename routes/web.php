@@ -39,6 +39,9 @@ Route::group(['middleware' => [LogRequest::class]], function () {
         Route::patch('blogs/{blog}/active', [BlogController::class, 'active'])->name('blogs.active');
         Route::group(['middleware' => [CheckUserActiveBlog::class]], function () {
             Route::resource('contacts', ContactController::class);
+            Route::get('products/port', [ProductController::class, 'port'])->name('products.port');
+            Route::get('products/export', [ProductController::class, 'export'])->name('products.export');
+            Route::post('products/import', [ProductController::class, 'import'])->name('products.import');
             Route::resource('products', ProductController::class);
             Route::resource('keywords', BlogKeywordController::class);
             Route::resource('logos', BlogLogoController::class);
