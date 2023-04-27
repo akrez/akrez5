@@ -22,7 +22,7 @@ class ProductService
 
         return [
             'title' => 'required|max:60',
-            'product_status' => [Rule::in(ProductStatus::getKeys())],
+            'product_status' => ['required', Rule::in(ProductStatus::getKeys())],
             'seq' => ['nullable', 'numeric'],
             'code' => [
                 'required',
@@ -119,7 +119,7 @@ class ProductService
                 'title' => (mb_strlen($row[1]) ? trim($row[1]) : null),
                 'code' => (mb_strlen($row[2]) ? trim($row[2]) : null),
                 'seq' => (mb_strlen($row[3]) ? floatval($row[3]) : null),
-                'product_status' => (boolval($row[4]) ? 1 : null),
+                'product_status' => (boolval($row[4]) ? ProductStatus::ACTIVE : ProductStatus::DEACTIVE),
             ];
 
             if (empty($attributes['id'])) {
