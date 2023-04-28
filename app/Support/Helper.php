@@ -3,6 +3,9 @@
 namespace App\Support;
 
 use Illuminate\Support\Carbon;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Helper
 {
     public static function iexplode($delimiters, $string, $limit = PHP_INT_MAX)
@@ -68,5 +71,30 @@ class Helper
     public static function getNowCarbonDate()
     {
         return Carbon::now()->format('Y-m-d H:i:s.u');
+    }
+
+    public static function exportExcelSheet($fileName, $sheetName, $source)
+    {
+        $headers = [
+            'Expires' => '0',
+            'Content-Encoding' => 'UTF-8',
+            'Content-type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ];
+
+        $callback = function () use ($source, $sheetName) {
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setCodeName($sheetName);
+            $sheet->setTitle($sheetName);
+            $sheet->setRightToLeft(true);
+            $sheet->fromArray($source);
+            foreach ($sheet->getColumnIterator() as $column) {
+                $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+            }
+            $writer = new Xlsx($spreadsheet);
+            $writer->save('php://output');
+        };
+
+        return response()->streamDownload($callback, $fileName, $headers);
     }
 }
