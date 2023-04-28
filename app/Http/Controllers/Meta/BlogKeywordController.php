@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMetaWithoutKeyRequest;
 use App\Services\MetaService;
 use App\Support\UserActiveBlog;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BlogKeywordController extends Controller
@@ -44,13 +45,27 @@ class BlogKeywordController extends Controller
      *
      * @return \Illuminate\Http\Replasponse
      */
-    public function store(StoreMetaWithoutKeyRequest $request)
+    public function store(Request $request)
     {
-        $model = UserActiveBlog::get();
+        $result = MetaService::storeWithoutKey(
+            $request->content,
+            UserActiveBlog::name(),
+            MetaCategory::CATEGORY_BLOG_KEYWORD,
+            UserActiveBlog::get(),
+            Auth::id()
+        );
 
-        MetaService::store($request->contentAsArray, UserActiveBlog::name(), MetaCategory::CATEGORY_BLOG_KEYWORD, $model, Auth::id());
-
-        return redirect()->back();
+        if ($result->status) {
+            return redirect()
+                ->route('products.index')
+                ->with('success', __('The :resource was created!', [
+                    'resource' => $result->model->title,
+                ]));
+        } else {
+            return back()
+                ->withErrors($result->validator)
+                ->withInput();
+        }
     }
 
     /**

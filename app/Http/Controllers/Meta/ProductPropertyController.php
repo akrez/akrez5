@@ -8,6 +8,7 @@ use App\Http\Requests\StoreMetaWithKeyRequest;
 use App\Models\Product;
 use App\Services\MetaService;
 use App\Support\UserActiveBlog;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProductPropertyController extends Controller
@@ -42,10 +43,27 @@ class ProductPropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreMetaWithKeyRequest $request, Product $product)
+    public function store(Request $request, Product $product)
     {
-        MetaService::store($request->contentAsArray, UserActiveBlog::name(), MetaCategory::CATEGORY_PRODUCT_PROPERTY, $product, Auth::id());
-        return redirect()->back();
+        $result = MetaService::storeWithKey(
+            $request->content,
+            UserActiveBlog::name(),
+            MetaCategory::CATEGORY_PRODUCT_PROPERTY,
+            $product,
+            Auth::id()
+        );
+
+        if ($result->status) {
+            return redirect()
+                ->route('products.index')
+                ->with('success', __('The :resource was created!', [
+                    'resource' => $result->model->title,
+                ]));
+        } else {
+            return back()
+                ->withErrors($result->validator)
+                ->withInput();
+        }
     }
 
     /**
