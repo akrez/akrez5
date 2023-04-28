@@ -7,8 +7,8 @@
     <div class="row">
         <div class="col-md-2 mt-2">
             <div class="form-group">
-                <a class="btn btn-primary w-100" href="{{ @route('products.export') }}">
-                    @lang('Export :resource', ['resource' => __('Products')])
+                <a class="btn btn-primary w-100" href="{{ $href }}">
+                    @lang('Export :resource', ['resource' => $label])
                 </a>
             </div>
         </div>
@@ -24,7 +24,7 @@
             @include('components/formBuilder', [
                 'type' => 'submit',
                 'name' => 'submit',
-                'value' => __('Import :resource', ['resource' => __('Products')]),
+                'value' => __('Import :resource', ['resource' => $label]),
                 'size' => 2,
                 'label' => '',
                 'class' => 'btn btn-primary w-100',
