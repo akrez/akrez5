@@ -61,23 +61,17 @@ class ProductService
         return Result::make($status, [], $product, $validator);
     }
 
-    public static function export($products, $cellsGlue = null, $rowsGlue = null)
+    public static function export($products)
     {
         $rows = [];
 
-        $header = [
+        $rows[] = [
             __('validation.attributes.id'),
             __('validation.attributes.title'),
             __('validation.attributes.code'),
             __('validation.attributes.seq'),
             __('validation.attributes.product_status'),
         ];
-
-        if (null === $cellsGlue) {
-            $rows[] = $header;
-        } else {
-            $rows[] = implode($cellsGlue, $header);
-        }
 
         foreach ($products as $product) {
             $row = [
@@ -88,18 +82,10 @@ class ProductService
                 $product->product_status,
             ];
 
-            if (null === $cellsGlue) {
-                $rows[] = $row;
-            } else {
-                $rows[] = implode($cellsGlue, $row);
-            }
+            $rows[] = $row;
         }
 
-        if (null === $rowsGlue) {
-            return $rows;
-        } else {
-            return implode($rowsGlue, $rows);
-        }
+        return $rows;
     }
 
     public static function import($blogName, $createdBy, $content)
