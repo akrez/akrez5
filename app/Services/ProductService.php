@@ -67,22 +67,20 @@ class ProductService
 
         $rows[] = [
             __('validation.attributes.id'),
-            __('validation.attributes.title'),
             __('validation.attributes.code'),
+            __('validation.attributes.title'),
             __('validation.attributes.seq'),
             __('validation.attributes.product_status'),
         ];
 
         foreach ($products as $product) {
-            $row = [
+            $rows[] = [
                 $product->id,
-                $product->title,
                 $product->code,
+                $product->title,
                 $product->seq,
                 $product->product_status,
             ];
-
-            $rows[] = $row;
         }
 
         return $rows;
@@ -102,8 +100,8 @@ class ProductService
 
             $attributes = [
                 'id' => (mb_strlen($row[0]) ? intval($row[0]) : null),
-                'title' => (mb_strlen($row[1]) ? trim($row[1]) : null),
-                'code' => (mb_strlen($row[2]) ? trim($row[2]) : null),
+                'code' => (mb_strlen($row[1]) ? trim($row[1]) : null),
+                'title' => (mb_strlen($row[2]) ? trim($row[2]) : null),
                 'seq' => (mb_strlen($row[3]) ? floatval($row[3]) : null),
                 'product_status' => (boolval($row[4]) ? ProductStatus::ACTIVE : ProductStatus::DEACTIVE),
             ];
