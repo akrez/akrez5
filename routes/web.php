@@ -11,6 +11,8 @@ use App\Http\Controllers\Meta\ProductPropertyController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Meta\BlogKeywordController;
 use App\Http\Controllers\Meta\ProductCategoryController;
+use App\Http\Controllers\Port\ProductCategoryController as PortProductCategoryController;
+use App\Http\Controllers\Port\ProductController as PortProductController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Middleware\CheckSuperAdmin;
 use App\Http\Middleware\CheckUserActiveBlog;
@@ -39,9 +41,15 @@ Route::group(['middleware' => [LogRequest::class]], function () {
         Route::patch('blogs/{blog}/active', [BlogController::class, 'active'])->name('blogs.active');
         Route::group(['middleware' => [CheckUserActiveBlog::class]], function () {
             Route::resource('contacts', ContactController::class);
-            Route::get('products/port', [ProductController::class, 'port'])->name('products.port');
-            Route::get('products/export', [ProductController::class, 'export'])->name('products.export');
-            Route::post('products/import', [ProductController::class, 'import'])->name('products.import');
+
+            Route::get('ports/products/index', [PortProductController::class, 'index'])->name('ports.products.index');
+            Route::get('ports/products/export', [PortProductController::class, 'export'])->name('ports.products.export');
+            Route::post('ports/products/import', [PortProductController::class, 'import'])->name('ports.products.import');
+
+            Route::get('ports/products-categories/index', [PortProductCategoryController::class, 'index'])->name('ports.products_categories.index');
+            Route::get('ports/products-categories/export', [PortProductCategoryController::class, 'export'])->name('ports.products_categories.export');
+            Route::post('ports/products-categories/import', [PortProductCategoryController::class, 'import'])->name('ports.products_categories.import');
+
             Route::resource('products', ProductController::class);
             Route::resource('keywords', BlogKeywordController::class);
             Route::resource('logos', BlogLogoController::class);
