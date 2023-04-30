@@ -15,6 +15,11 @@ class Meta extends Model
 
     public const UPDATED_AT = null;
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'model_id');
+    }
+
     public function scopeFilterBlogName(Builder $query, $blogName)
     {
         $query->where('blog_name', $blogName);

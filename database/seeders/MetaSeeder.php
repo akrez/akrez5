@@ -23,32 +23,28 @@ class MetaSeeder extends Seeder
 
         $faker = Factory::create();
 
-        MetaService::store(
-            [
-                [
-                    'key' => null,
-                    'values' => $faker->words(7),
-                ],
-            ],
+        MetaService::storeWithoutKey(
+            implode(MetaService::GLUE_VALUES, $faker->words(7)),
             $blog->name,
             MetaCategory::CATEGORY_PRODUCT_CATEGORY,
             $product,
             $blog->created_by
         );
 
-        MetaService::store([
-            [
-                'key' => $faker->words(1, true),
-                'values' => $faker->words(7),
-            ],
-            [
-                'key' => $faker->words(1, true),
-                'values' => $faker->words(7),
-            ],
-            [
-                'key' => $faker->words(1, true),
-                'values' => $faker->words(7),
-            ],
-        ], $blog->name, MetaCategory::CATEGORY_PRODUCT_PROPERTY, $product, $blog->created_by);
+        MetaService::storeWithKey(
+            implode(MetaService::GLUE_LINES, [
+                $faker->words(1, true) . MetaService::GLUE_KEY_VALUES . implode(MetaService::GLUE_VALUES, $faker->words(7)),
+                $faker->words(1, true) . MetaService::GLUE_KEY_VALUES . implode(MetaService::GLUE_VALUES, $faker->words(7)),
+                $faker->words(1, true) . MetaService::GLUE_KEY_VALUES . implode(MetaService::GLUE_VALUES, $faker->words(7)),
+                $faker->words(1, true) . MetaService::GLUE_KEY_VALUES . implode(MetaService::GLUE_VALUES, $faker->words(7)),
+                $faker->words(1, true) . MetaService::GLUE_KEY_VALUES . implode(MetaService::GLUE_VALUES, $faker->words(7)),
+                $faker->words(1, true) . MetaService::GLUE_KEY_VALUES . implode(MetaService::GLUE_VALUES, $faker->words(7)),
+                $faker->words(1, true) . MetaService::GLUE_KEY_VALUES . implode(MetaService::GLUE_VALUES, $faker->words(7)),
+            ]),
+            $blog->name,
+            MetaCategory::CATEGORY_PRODUCT_PROPERTY,
+            $product,
+            $blog->created_by
+        );
     }
 }

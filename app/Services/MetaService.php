@@ -3,10 +3,16 @@
 namespace App\Services;
 
 use App\Models\Meta;
+use App\Models\Product;
 use App\Support\Helper;
+use App\Support\Result;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 
 class MetaService
 {
+    const MAX_LENGTH = 60;
+
     const SEPARATOR_LINES = [PHP_EOL];
     const SEPARATOR_KEY_VALUES = [":", "\t"];
     const SEPARATOR_VALUES = [",", "،", "\t"];
@@ -126,27 +132,174 @@ class MetaService
         return array_values($result);
     }
 
-    public static function store(array $keysValues, $blogName, $category, $model, $userCreatedId)
+    public static function exportProduct($blogName, $category, $groupByKey = false): array
     {
-        Meta::filterModel($blogName, $category, $model)->delete();
+        $metas = Meta::with('product')
+            ->filterCategory($blogName, $category)
+            ->get();
 
-        $createdAt = Helper::getNowCarbonDate();
+        $rows = [];
 
-        $insertData = [];
-        foreach ($keysValues as $keyValues) {
-            foreach ($keyValues['values'] as $value) {
-                $insertData[] = [
-                    'created_at' => $createdAt,
-                    'created_by' => $userCreatedId,
-                    'key' => $keyValues['key'],
-                    'value' => $value,
-                    'model_class' => Helper::extractModelClass($model),
-                    'model_id' => Helper::extractModelId($model),
-                    'category' => $category,
-                    'blog_name' => $blogName,
+        $rows[] = [
+            __('validation.attributes.code'),
+            __('validation.attributes.title'),
+            __('validation.attributes.key'),
+            __('validation.attributes.value'),
+        ];
+
+        foreach ($metas as $meta) {
+            $modelId = $meta->model_id;
+            $key = ($groupByKey ? $meta->key : null);
+
+            $uniqueKey = $modelId . '-' . $key;
+
+            if (!isset($rows[$uniqueKey])) {
+                $rows[$uniqueKey] = [
+                    'code' => ($meta->product ? $meta->product->code : null),
+                    'title' => ($meta->product ? $meta->product->title : null),
+                    'key' => $key,
+                    'values' => $meta->value,
                 ];
+            } else {
+                $rows[$uniqueKey]['values'] = ($rows[$uniqueKey]['values'] . MetaService::GLUE_VALUES . $meta->value);
             }
         }
-        Meta::insert($insertData);
+
+        return $rows;
+    }
+
+    public static function importProduct($excelAsArray, $blogName, $category, $userCreatedId, $withKey)
+    {
+        $contentRows = [];
+        foreach ($excelAsArray as $excelRowKey => $excelRow) {
+            if (0 == $excelRowKey) {
+                continue;
+            }
+
+            $attributes = [
+                'code' => (mb_strlen($excelRow[0]) ? trim($excelRow[0]) : null),
+                'title' => (mb_strlen($excelRow[1]) ? trim($excelRow[1]) : null),
+                'key' => (mb_strlen($excelRow[2]) ? trim($excelRow[2]) : null),
+                'values' => (mb_strlen($excelRow[3]) ? trim($excelRow[3]) : null),
+            ];
+
+            $productCode = $attributes['code'];
+            $key = ($withKey ? $attributes['key'] : null);
+
+            if (isset($contentRows[$productCode][$key])) {
+                $contentRows[$productCode][$key] = ($contentRows[$productCode][$key] . MetaService::GLUE_VALUES . $attributes['values']);
+            } else {
+                $contentRows[$productCode][$key] = $attributes['values'];
+            }
+        }
+
+        $status = true;
+        $messages = new MessageBag();
+        $data = [];
+
+        foreach ($contentRows as $productCode => $keysValues) {
+            if (
+                $keysValues and
+                $productCode and
+                $product = Product::filterBlogName($blogName)->whereCode($productCode)->first()
+            ) {
+                if ($withKey) {
+                    $content = [];
+                    foreach ($keysValues as $key => $values) {
+                        $content[] = ($key . MetaService::GLUE_KEY_VALUES . $values);
+                    }
+                    $content = implode(MetaService::GLUE_LINES, $content);
+                } else {
+                    $content = implode(MetaService::GLUE_LINES, $keysValues);
+                }
+
+                if ($withKey) {
+                    $result = MetaService::storeWithKey($content, $blogName, $category, $product, $userCreatedId);
+                } else {
+                    $result = MetaService::storeWithoutKey($content, $blogName, $category, $product, $userCreatedId);
+                }
+
+                $status = ($status and $result->status);
+                foreach ($result->validator->errors()->all() as $errorKey => $error) {
+                    $messages->add('port', $productCode . ': ' .  $error);
+                }
+                $data[] = $result;
+            }
+        }
+
+
+        return Result::make($status, $messages, null, null, $data);
+    }
+
+    public static function storeWithKey($content, $blogName, $category, $model, $userCreatedId)
+    {
+        $keysValues = MetaService::parseWithKey($content);
+        $validator = Validator::make(
+            [
+                'content' => $keysValues,
+            ],
+            [
+                'content.*.key' => 'max:' . static::MAX_LENGTH,
+                'content.*.values.*' => 'max:' . static::MAX_LENGTH,
+            ],
+            [],
+            [
+                'content.*.key' => __('Key'),
+                'content.*.values.*' => __('Value'),
+            ],
+        );
+        //
+        return MetaService::store($keysValues, $validator, $blogName, $category, $model, $userCreatedId);
+    }
+
+    public static function storeWithoutKey($content, $blogName, $category, $model, $userCreatedId)
+    {
+        $keysValues = MetaService::parseWithoutKey($content);
+        $validator = Validator::make(
+            [
+                'content' => $keysValues,
+            ],
+            [
+                'content.*.key' => 'max:' . static::MAX_LENGTH,
+                'content.*.values.*' => 'max:' . static::MAX_LENGTH,
+            ],
+            [],
+            [
+                'content.*.key' => __('Key'),
+                'content.*.values.*' => __('Value'),
+            ],
+        );
+        return MetaService::store($keysValues, $validator, $blogName, $category, $model, $userCreatedId);
+    }
+
+    private static function store(array $keysValues, $validator, $blogName, $category, $model, $userCreatedId)
+    {
+        $status = false;
+        $insertedData = [];
+        //
+        if (!$validator->fails()) {
+            Meta::filterModel($blogName, $category, $model)->delete();
+            $createdAt = Helper::getNowCarbonDate();
+            foreach ($keysValues as $keyValues) {
+                foreach ($keyValues['values'] as $value) {
+                    $insertedData[] = [
+                        'created_at' => $createdAt,
+                        'created_by' => $userCreatedId,
+                        'key' => $keyValues['key'],
+                        'value' => $value,
+                        'model_class' => Helper::extractModelClass($model),
+                        'model_id' => Helper::extractModelId($model),
+                        'category' => $category,
+                        'blog_name' => $blogName,
+                    ];
+                }
+            }
+            $status = Meta::insert($insertedData);
+        }
+        //
+        return Result::make($status, [], $model, $validator, [
+            'keysValues' => $keysValues,
+            'insertedData' => $insertedData,
+        ]);
     }
 }
