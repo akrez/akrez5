@@ -48,6 +48,10 @@ Route::group(['middleware' => [LogRequest::class]], function () {
             Route::get('products/categories/export', [ProductCategoryController::class, 'export'])->name('products.categories.export');
             Route::post('products/categories/import', [ProductCategoryController::class, 'import'])->name('products.categories.import');
 
+            Route::get('products/properties/port', [ProductPropertyController::class, 'port'])->name('products.properties.port');
+            Route::get('products/properties/export', [ProductPropertyController::class, 'export'])->name('products.properties.export');
+            Route::post('products/properties/import', [ProductPropertyController::class, 'import'])->name('products.properties.import');
+
             Route::resource('products', ProductController::class);
             Route::resource('keywords', BlogKeywordController::class);
             Route::resource('logos', BlogLogoController::class);
