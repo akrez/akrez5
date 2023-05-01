@@ -11,12 +11,12 @@
             </a>
         </div>
         <div class="col-md-2 mb-2 pull-right">
-            <a class="btn btn-success w-100" href="{{ route('ports.products.index') }}">
+            <a class="btn btn-success w-100" href="{{ route('products.port') }}">
                 @lang('Import :resource', ['resource' => __('Products')])
             </a>
         </div>
         <div class="col-md-2 mb-2 pull-right">
-            <a class="btn btn-success w-100" href="{{ route('ports.products_categories.index') }}">
+            <a class="btn btn-success w-100" href="{{ route('products.categories.port') }}">
                 @lang('Import :resource', ['resource' => __('Categories')])
             </a>
         </div>
