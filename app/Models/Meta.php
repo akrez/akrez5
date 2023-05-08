@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Meta extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     public const UPDATED_AT = null;
 

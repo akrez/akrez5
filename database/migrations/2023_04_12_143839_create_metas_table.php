@@ -17,7 +17,6 @@ class CreateMetasTable extends Migration
             $table->id();
             $table->string('category')->nullable();
             $table->timestamp('created_at', 0)->nullable();
-            $table->softDeletes();
             $table->string('key')->nullable();
             $table->string('value');
             $table->string('model_class')->nullable();
