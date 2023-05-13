@@ -75,7 +75,8 @@
     <div class="container">
         @if (UserActiveBlog::has())
             <nav class="navbar navbar-expand-sm navbar-light sticky-top text-dark bg-light rounded shadow-sm mb-3 px-2">
-                <a class="navbar-brand p-0 mx-3" href="#">{{ UserActiveBlog::attr('title') }}</a>
+                <a class="navbar-brand p-0 mx-3"
+                    href="{{ route('blogs.show', ['blog' => UserActiveBlog::get()]) }}">{{ UserActiveBlog::attr('title') }}</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>

@@ -7,6 +7,7 @@ use App\Facades\UserFacade;
 use App\Http\Requests\StoreBlogRequest;
 use App\Models\Blog;
 use App\Http\Requests\UpdateBlogRequest;
+use App\Models\Visit;
 use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
@@ -61,7 +62,14 @@ class BlogController extends Controller
      */
     public function show(Blog $blog)
     {
-        //
+        $visits = Visit::filterBlogName($blog->name)
+            ->orderDefault()
+            ->paginate(250);
+
+        return view('blogs.show', [
+            'blog' => $blog,
+            'visits' => $visits,
+        ]);
     }
 
     /**

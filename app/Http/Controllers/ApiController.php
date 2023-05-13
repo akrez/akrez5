@@ -8,13 +8,33 @@ use App\Models\Contact;
 use App\Models\Product;
 use App\Services\GalleryService;
 use App\Services\MetaService;
+use App\Services\VisitService;
 
 class ApiController extends Controller
 {
+    protected function jsonResponse($blogName, $httpCode = 200, $data = [])
+    {
+        VisitService::store(
+            $blogName,
+            $httpCode,
+            request()->ip(),
+            request()->method(),
+            request()->url(),
+            request()->userAgent()
+        );
+
+        return response()->json(
+            $data,
+            $httpCode
+        );
+    }
+
     public function index($blogName)
     {
-        $blog = Blog::filterName($blogName)->filterActive()
-            ->firstOrFail();
+        $blog = Blog::filterName($blogName)->filterActive()->first();
+        if (!$blog) {
+            return $this->json($blogName, 404);
+        }
 
         $products = Product::filterBlogName($blog->name)->filterActive()
             ->orderDefault()
@@ -33,7 +53,7 @@ class ApiController extends Controller
         $blogLogos = GalleryService::getApiResponse($blog->name, GalleryService::CATEGORY_BLOG_LOGO);
         $blogHeros = GalleryService::getApiResponse($blog->name, GalleryService::CATEGORY_BLOG_HERO);
 
-        return response()->json([
+        return $this->jsonResponse($blogName, 200, [
             'blog' => $blog,
             'blog_categories' => $blogCategories,
             'products' => $products,

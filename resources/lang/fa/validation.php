@@ -177,6 +177,11 @@ return [
         'product_status' => 'وضعیت',
         'selected_at' => 'انتخاب شده در',
         'is_selected' => 'انتخاب شده است؟',
+        'ip' => 'IP',
+        'method' => 'Method',
+        'url' => 'Url',
+        'user_agent' => 'User Agent',
+        'http_code' => 'Http Code',
     ],
 
 ];
