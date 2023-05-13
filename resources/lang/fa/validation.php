@@ -182,6 +182,7 @@ return [
         'url' => 'Url',
         'user_agent' => 'User Agent',
         'http_code' => 'Http Code',
+        'created_at' => 'ایجاد شده در',
     ],
 
 ];
