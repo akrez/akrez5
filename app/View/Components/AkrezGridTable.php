@@ -31,7 +31,7 @@ class AkrezGridTable extends AkrezBaseGridTable
         return $this;
     }
 
-    public function newJdfColumn($field, $header = '')
+    public function newJdfColumn($field, $header = null)
     {
         $this->newColumn();
 
