@@ -12,12 +12,10 @@
         <div class="col-md-12">
             {!!
              App\View\Components\AkrezGridTable::build($visits)
-            ->newFieldColumn('created_at')
+            ->newJdfColumn('created_at')
             ->newFieldColumn('http_code')
             ->newFieldColumn('ip')
-            ->newFieldColumn('method')
-            ->newFieldColumn('url')
-            ->newFieldColumn('user_agent')
+            ->newFieldColumn('user_agent')->contentAttributes(['class'=>'text-ltr'])
             ->render()
              !!}
             {{ $visits->links() }}

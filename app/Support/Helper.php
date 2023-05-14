@@ -68,6 +68,14 @@ class Helper
         }
     }
 
+    public static function carbonToJdf(?Carbon $datetime)
+    {
+        if ($datetime) {
+            return Jdf::jdate('Y-m-d H:i:s', $datetime->unix());
+        }
+        return null;
+    }
+
     public static function getNowCarbonDate()
     {
         return Carbon::now()->format('Y-m-d H:i:s.u');

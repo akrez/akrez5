@@ -31,6 +31,31 @@ class AkrezGridTable extends AkrezBaseGridTable
         return $this;
     }
 
+    public function newJdfColumn($field, $header = '')
+    {
+        $this->newColumn();
+
+        if (null === $header) {
+            $this->header('{{ $headerString }}');
+            $this->headerData(['headerString' => __('validation.attributes.' . $field)]);
+        }
+
+        $this->content('
+        @if (is_object($model) and isset($model->{$field}) and $model->{$field})
+            {{ App\Support\Helper::carbonToJdf($model->{$field}) }}
+        @elseif (is_array($model) and isset($model[$field]) and $model[$field])
+            {{ App\Support\Helper::carbonToJdf($model[$field]) }}
+        @endif
+        ');
+        $this->contentData(function ($model, $data, $grid) use ($field) {
+            return [
+                'field' => $field,
+            ];
+        });
+
+        return $this;
+    }
+
     public function newRawColumn($content, $data = [], $header = '')
     {
         $this->newColumn();
