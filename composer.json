@@ -12,6 +12,7 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "*",
+        "laravel/breeze": "^1.10",
         "laravel/framework": "^8.75",
         "laravel/jetstream": "^2.9",
         "laravel/sanctum": "^2.11",
