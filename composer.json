@@ -13,6 +13,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "*",
         "laravel/breeze": "*",
+        "laravel/fortify": "^1.17",
         "laravel/framework": "^8.75",
         "laravel/jetstream": "*",
         "laravel/sanctum": "*",
