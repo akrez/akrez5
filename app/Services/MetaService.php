@@ -87,7 +87,7 @@ class MetaService
         return implode(MetaService::GLUE_LINES, $metas);
     }
 
-    public static function getAsTextWithKey($blogName, $category, $model): String
+    public static function getAsStringWithKey($blogName, $category, $model): array
     {
         $metas = Meta::filterModel($blogName, $category, $model)->get();
 
@@ -98,10 +98,17 @@ class MetaService
 
         $result = [];
         foreach ($items as $key => $values) {
-            $result[] = $key . MetaService::GLUE_KEY_VALUES . implode(MetaService::GLUE_VALUES, $values);
+            $result[$key] = implode(MetaService::GLUE_KEY_VALUES, $values);
         }
 
-        return implode(MetaService::GLUE_LINES, $result);
+        return $result;
+    }
+
+    public static function getAsTextWithKey($blogName, $category, $model): String
+    {
+        $items = static::getAsStringWithKey($blogName, $category, $model);
+
+        return implode(MetaService::GLUE_LINES, $items);
     }
 
     public static function getApiResponse($blogName, $category, $groupByModelId = false, $groupByKey = false): array
